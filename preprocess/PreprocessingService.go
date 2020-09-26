@@ -57,7 +57,7 @@ func convertToJPG(resized chan image.Image,
 	}
 	wg.Wait();
 	close(toAugment);
-	fmt.Println("image converted");
+	fmt.Println("toAugment closed");
 }
 
 func resizing(checked chan image.Image, 

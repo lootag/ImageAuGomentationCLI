@@ -27,4 +27,5 @@ func convertToJPGWorker(decodedImage *image.Image,
 
 	toSend := jpegBuffer.Bytes();
 	toAugment <- toSend;
+	fmt.Println("the bytes were passed");
 }

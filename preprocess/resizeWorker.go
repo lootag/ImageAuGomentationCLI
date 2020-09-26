@@ -1,6 +1,7 @@
 package preprocess;
 
 import(
+	"fmt";
 	"image";
 	"sync";
 	"github.com/nfnt/resize";
@@ -13,5 +14,6 @@ func resizeWorker(decodedImage *image.Image,
 	defer (*wg).Done();
 	newImage := resize.Resize(uint(size), 0, *decodedImage,resize.Lanczos3);
 	resized <- newImage;
+	fmt.Println("resized image sent");
 
 }

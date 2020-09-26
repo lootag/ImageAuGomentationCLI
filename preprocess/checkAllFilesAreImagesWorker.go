@@ -32,6 +32,7 @@ func checkAllFilesAreImagesWorker(file string,
 
 	if imageFormat == "jpg" || imageFormat == "png"{
 		checked <- decodedImage;
+		fmt.Println("checked image sent");
 	} else {
 		panic("The file " + file + " is not an image, or its format is not supported");
 	}
