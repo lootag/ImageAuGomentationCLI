@@ -2,14 +2,13 @@ package main;
 
 import(
 	"errors";
-	"github.com/lootag/ImageAuGomentationCLI/augmentation";
 	"github.com/lootag/ImageAuGomentationCLI/blur";
 	"github.com/lootag/ImageAuGomentationCLI/flip";
 	"github.com/lootag/ImageAuGomentationCLI/rotate";
 
 )
 
-func AugmentationsFactory(augmentation string) (augmentation.IAugmentationService, error){
+func AugmentationsFactory(augmentation string) (IAugmentationService, error){
 	if augmentation == "blur" {
 		return blur.BlurService{}, nil
 	} else if augmentation == "flip" {
