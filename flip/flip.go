@@ -1,25 +1,23 @@
-package flip; 
+package flip
 
-import(
-	"image";
-	"fmt";
-	"sync";
-	"github.com/lootag/ImageAuGomentationCLI/entities";
+import (
+	"fmt"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
+	"image"
+	"sync"
 )
 
-type FlipService struct{
-
+type FlipService struct {
 }
 
-
-func (flipService FlipService) Augment(toAugment chan image.Image, 
-									   wg *sync.WaitGroup, 
-									   augmented chan image.Image,
-									   options entities.Options){
-	defer wg.Done();
-	flip();
+func (flipService FlipService) Augment(toAugment chan image.Image,
+	wg *sync.WaitGroup,
+	augmented chan image.Image,
+	options entities.Options) {
+	defer wg.Done()
+	flip()
 }
 
-func flip(){
-	fmt.Println("Flip");
+func flip() {
+	fmt.Println("Flip")
 }

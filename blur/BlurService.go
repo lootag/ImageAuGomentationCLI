@@ -1,24 +1,23 @@
-package blur;
+package blur
 
-import(
-	"image";
-	"fmt";
-	"sync";
-	"github.com/lootag/ImageAuGomentationCLI/entities";
+import (
+	"fmt"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
+	"image"
+	"sync"
 )
 
-type BlurService struct{
-
+type BlurService struct {
 }
 
-func (blurService BlurService) Augment(toAugment chan image.Image, 
-									   wg *sync.WaitGroup,
-									   augmented chan image.Image,
-									   options entities.Options) {
-	defer wg.Done();
-	blur();
+func (blurService BlurService) Augment(toAugment chan image.Image,
+	wg *sync.WaitGroup,
+	augmented chan image.Image,
+	options entities.Options) {
+	defer wg.Done()
+	blur()
 }
 
-func blur(){
-	fmt.Println("Blur");
+func blur() {
+	fmt.Println("Blur")
 }

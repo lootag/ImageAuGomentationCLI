@@ -1,5 +1,5 @@
-package entities;
+package entities
 
-type Options struct{
-	Side Direction;
+type Options struct {
+	Side Direction
 }
