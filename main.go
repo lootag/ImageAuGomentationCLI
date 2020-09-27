@@ -1,14 +1,13 @@
 package main;
 
 import(
-	"os";
 	"sync";
 )
 
 var wg sync.WaitGroup;
 
 func main(){
-
+	/*
 	for argumentIndex := 1; argumentIndex < len(os.Args); argumentIndex++{
 		augmentation, err := AugmentationsFactory(os.Args[argumentIndex]);
 		if err == nil{
@@ -19,4 +18,5 @@ func main(){
 		}
 	}
 	wg.Wait()
+	*/
 }

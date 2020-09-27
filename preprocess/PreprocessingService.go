@@ -12,18 +12,16 @@ type PreprocessingService struct{
 
 //Implements IPreprocessingService
 func (preprocessingService PreprocessingService) Preprocess(images *[]string, 
-															toAugment chan []byte, 
+															resized chan image.Image, 
 															size int, 
 															mainWaitGroup *sync.WaitGroup){
 	defer (*mainWaitGroup).Done();
 	var wg sync.WaitGroup;
 	checked := make(chan image.Image);
-	resized := make(chan image.Image)
 	
-	wg.Add(3);
+	wg.Add(2);
 	go checkAllFilesAreImages(images, checked, &wg);
 	go resizing(checked, resized, size, &wg);
-	go convertToJPG(resized, toAugment, &wg);
 	wg.Wait();
 }
 

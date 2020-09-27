@@ -1,9 +1,10 @@
 package flip; 
 
 import(
-	
+	"image";
 	"fmt";
-	"sync"
+	"sync";
+	"github.com/lootag/ImageAuGomentationCLI/entities";
 )
 
 type FlipService struct{
@@ -11,7 +12,10 @@ type FlipService struct{
 }
 
 
-func (flipService FlipService) Augment(wg *sync.WaitGroup){
+func (flipService FlipService) Augment(toAugment chan image.Image, 
+									   wg *sync.WaitGroup, 
+									   augmented chan image.Image,
+									   options entities.Options){
 	defer wg.Done();
 	flip();
 }

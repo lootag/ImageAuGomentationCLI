@@ -12,7 +12,9 @@ func resizeWorker(decodedImage *image.Image,
 				  wg *sync.WaitGroup,
 				  size int){
 	defer (*wg).Done();
-	newImage := resize.Resize(uint(size), 0, *decodedImage,resize.Lanczos3);
+	fmt.Println("entered resizeWorker")
+	newImage := resize.Resize(uint(size), uint(size), *decodedImage,resize.Lanczos3);
+	fmt.Println("New image created")
 	resized <- newImage;
 	fmt.Println("resized image sent");
 

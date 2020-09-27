@@ -8,7 +8,7 @@ import(
 
 )
 
-func AugmentationsFactory(augmentation string) (IAugmentationService, error){
+func AugmentationsFactory(augmentation string) (Augmenter, error){
 	if augmentation == "blur" {
 		return blur.BlurService{}, nil
 	} else if augmentation == "flip" {
