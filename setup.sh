@@ -12,11 +12,11 @@ which go
 if [ $? != 0 ] && [ $KERNEL == "Darwin" ]; then
     brew install golang
     touch $HOME/.bashrc
-    sed -i -e 'a\\
+    sed -i -e 'a\
     export GOPATH=$HOME/go' $HOME/.bashrc
-    sed -i -e 'a\\
+    sed -i -e 'a\
     export GOROOT="$(brew --prefix golang)/libexec"' $HOME/.bashrc
-    sed -i -e 'a\\
+    sed -i -e 'a\
     export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin' $HOME/.bashrc
     source $HOME/.bashrc
 else if [ $? != 0 ] && [ $KERNEL == "Linux" ]; then
