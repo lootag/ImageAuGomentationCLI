@@ -2,13 +2,14 @@ package main
 
 import (
 	"github.com/lootag/ImageAuGomentationCLI/entities"
-	"image"
 	"sync"
 )
 
 type Augmenter interface {
-	Augment(toAugment chan image.Image,
+	Augment(imagesToAugment *[]entities.ImageInfo,
+		annotationsToAugment *[]entities.Annotation,
 		wg *sync.WaitGroup,
-		augmented chan image.Image,
+		augmentedImages chan entities.ImageInfo,
+		augmentedAnnotation chan entities.Annotation,
 		options entities.Options)
 }

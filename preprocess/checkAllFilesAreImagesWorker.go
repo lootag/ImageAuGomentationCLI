@@ -1,17 +1,18 @@
 package preprocess
 
 import (
-	"fmt"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
 	"os"
 	"sync"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
 func checkAllFilesAreImagesWorker(file string,
+	fileName string,
 	wg *sync.WaitGroup,
-	checked chan image.Image) {
+	checked chan entities.ImageInfo) {
 	defer (*wg).Done()
 	lastCharacter := len(file)
 	thirdToLastCharacter := len(file) - 3
@@ -20,18 +21,19 @@ func checkAllFilesAreImagesWorker(file string,
 	if err != nil {
 		panic("There was a problem opening the file " + file)
 	}
-
+	defer imageFile.Close();
 	decodedImage, _, err := image.Decode(imageFile)
 
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println("The format is " + imageFormat)
+	var imageInfo entities.ImageInfo;
+	imageInfo.OriginalFileName = fileName;
+	imageInfo.ImageSource = decodedImage;
 
 	if imageFormat == "jpg" || imageFormat == "png" {
-		checked <- decodedImage
-		fmt.Println("checked image sent")
+		checked <- imageInfo;
 	} else {
 		panic("The file " + file + " is not an image, or its format is not supported")
 	}
