@@ -6,5 +6,6 @@ type Options struct {
 	Sigma          float64
 	Xml            bool
 	BatchSize      int
-	AnnotationType AnnotationType
+	InAnnotationType AnnotationType
+	OutAnnotationType AnnotationType
 }

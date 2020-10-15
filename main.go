@@ -22,9 +22,10 @@ func main() {
 
 	folderPtr := flag.String("folder", ".", "The directory where you want to run the utility.")
 	rotatePtr := flag.String("rotate", "all", "Values: 'all', 'left', 'right', 'flip'.")
-	annotationTypePtr := flag.String("annotationtype", "pascalvoc", "Values: 'pascalvoc'")
+	inputannotationTypePtr := flag.String("in_annotationtype", "pascalvoc", "Values: 'pascalvoc'")
+	outputannotationTypePtr := flag.String("out_annotationtype", "pascalvoc", "Values: 'pascalvoc'")
 	sigmaPtr := flag.Int("blur", 20, "The intensity of the blur. Set to 0 for no blur.")
-	batchPtr := flag.Int("batchsize", 100, "The size of the batches you intend to process synchronously.")
+	batchPtr := flag.Int("batch_size", 100, "The size of the batches you intend to process asynchronously.")
 	sizePtr := flag.Int("size", 464, "The height and width to which you intend to resize your images.")
 	xmlPtr := flag.Bool("annotations", true, "Whether the images are annotated or not")
 	flag.Parse()
@@ -34,7 +35,11 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	annotationType, err := convertStringToAnnotationType(*annotationTypePtr)
+	inAnnotationType, err := convertStringToAnnotationType(*inputannotationTypePtr)
+	if err != nil {
+		panic(err)
+	}
+	outAnnotationType, err := convertStringToAnnotationType(*outputannotationTypePtr)
 	if err != nil {
 		panic(err)
 	}
@@ -43,7 +48,8 @@ func main() {
 	options.Sigma = float64(*sigmaPtr)
 	options.Xml = *xmlPtr
 	options.Size = *sizePtr
-	options.AnnotationType = annotationType
+	options.InAnnotationType = inAnnotationType
+	options.OutAnnotationType = outAnnotationType
 
 	imagePaths, imageNames := getAllPaths(*folderPtr)
 

@@ -54,14 +54,14 @@ func batchProcess(options *entities.Options,
 			resizedCopy,
 			resizedAnnotations,
 			resizedAnnotationsCopy,
-			(*options).AnnotationType,
+			(*options).InAnnotationType,
 			(*options).Size,
 			(*options).Xml,
 			&wg)
 		go (*converter).ConvertToJPG(resized, &wg, "resize", &pathsToProcess)
 		if (*options).Xml {
 			wg.Add(1)
-			go (*converter).ConvertToText(resizedAnnotations, &wg, (*options).AnnotationType)
+			go (*converter).ConvertToText(resizedAnnotations, &wg, (*options).OutAnnotationType)
 		}
 		wg.Wait()
 		for image := range resizedCopy {
@@ -92,7 +92,7 @@ func batchProcess(options *entities.Options,
 			go (*converter).ConvertToJPG(rotated, &wg, actions[0], &pathsToProcess)
 			if (*options).Xml {
 				wg.Add(1)
-				go (*converter).ConvertToText(rotatedAnnotations, &wg, (*options).AnnotationType)
+				go (*converter).ConvertToText(rotatedAnnotations, &wg, (*options).OutAnnotationType)
 			}
 		}
 
@@ -112,7 +112,7 @@ func batchProcess(options *entities.Options,
 			go (*converter).ConvertToJPG(blurred, &wg, actions[1], &pathsToProcess)
 			if (*options).Xml {
 				wg.Add(1)
-				go (*converter).ConvertToText(blurredAnnotations, &wg, (*options).AnnotationType)
+				go (*converter).ConvertToText(blurredAnnotations, &wg, (*options).OutAnnotationType)
 			}
 		}
 

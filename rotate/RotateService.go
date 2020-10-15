@@ -17,10 +17,10 @@ func (rotateService RotateService) Augment(imagesToAugment *[]entities.ImageInfo
 	defer (*mainWaitGroup).Done()
 	var wg sync.WaitGroup
 	wg.Add(1)
-	go rotate(imagesToAugment,
+	go rotate(imagesToAugment, 
 		annotationsToAugment,
-		&wg,
-		options.Side,
+		&wg, 
+		options.Side, 
 		augmentedImages,
 		augmentedAnnotations,
 		options.Xml)
@@ -35,22 +35,22 @@ func rotate(imagesToRotate *[]entities.ImageInfo,
 	augmentedAnnotations chan entities.Annotation,
 	annotated bool) {
 	defer (*augmentWaitGroup).Done()
-	var wg sync.WaitGroup
+	var wg sync.WaitGroup;
 	for imageIndex := range *imagesToRotate {
 		wg.Add(1)
 		go rotateImageWorker((*imagesToRotate)[imageIndex], &wg, direction, augmentedImages)
 	}
 
-	if annotated {
-		for annotationIndex := range *annotationsToRotate {
+	if annotated{
+		for annotationIndex := range *annotationsToRotate{
 			wg.Add(1)
-			go rotateAnnotationWorker((*annotationsToRotate)[annotationIndex],
-				augmentedAnnotations,
-				direction,
-				&wg)
+			go rotateAnnotationWorker((*annotationsToRotate)[annotationIndex], 
+			augmentedAnnotations,
+			direction, 
+			&wg);
 		}
 	}
 	wg.Wait()
-	close(augmentedImages)
-	close(augmentedAnnotations)
+	close(augmentedImages);
+	close(augmentedAnnotations);
 }
