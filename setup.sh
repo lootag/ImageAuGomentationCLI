@@ -11,9 +11,10 @@ which go
 # Install Go
 if [ $? != 0 ] && [ $KERNEL == "Darwin" ]; then
     brew install golang
-    export GOPATH=$HOME/go
-    export GOROOT="$(brew --prefix golang)/libexec"
-    export PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin"
+    touch $HOME/.bashrc
+    sed -i -e '$aexport GOPATH=$HOME/go' $HOME/.bashrc
+    sed -i -e '$aexport GOROOT="$(brew --prefix golang)/libexec"' $HOME/.bashrc
+    sed -i -e '$aexport PATH="$PATH:${GOPATH}/bin:${GOROOT}/bin' $HOME/.bashrc
     source $HOME/.bashrc
 else if [ $? != 0 ] && [ $KERNEL == "Linux" ]; then
     echo $PASSWORD | sudo -S apt-get install golang
