@@ -1,10 +1,10 @@
-package annotationWriters;
+package annotationWriters
 
-import(
-	"sync";
-	"github.com/lootag/ImageAuGomentationCLI/entities";
+import (
+	"github.com/lootag/ImageAuGomentationCLI/entities"
+	"sync"
 )
 
-type AnnotationWriter interface{
-	Write(annotation entities.Annotation, augmentationWaitGroup *sync.WaitGroup);
+type AnnotationWriter interface {
+	Write(annotation entities.Annotation, augmentationWaitGroup *sync.WaitGroup)
 }

@@ -1,22 +1,22 @@
-package main;
+package main
 
-import(
-	"github.com/lootag/ImageAuGomentationCLI/entities";
-	"errors";
+import (
+	"errors"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
-func convertStringToDirection(argument string) (entities.Direction, error){
+func convertStringToDirection(argument string) (entities.Direction, error) {
 	switch argument {
 	case "all":
-		return entities.ALL, nil;
+		return entities.ALL, nil
 	case "left":
-		return entities.LEFT, nil;
+		return entities.LEFT, nil
 	case "right":
-		return entities.RIGHT, nil;
+		return entities.RIGHT, nil
 	case "flip":
-		return entities.FLIP, nil;
+		return entities.FLIP, nil
 	case "skip":
-		return entities.NIL_DIRECTION, nil;
+		return entities.NIL_DIRECTION, nil
 	}
-	return entities.NIL_DIRECTION, errors.New("The rotation you've specified is not supported.");
+	return entities.NIL_DIRECTION, errors.New("The rotation you've specified is not supported.")
 }

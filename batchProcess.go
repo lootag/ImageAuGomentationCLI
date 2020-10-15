@@ -1,123 +1,123 @@
-package main;
+package main
 
-import(
-	"fmt";
-	"strconv";
-	"github.com/lootag/ImageAuGomentationCLI/entities";
-	"github.com/lootag/ImageAuGomentationCLI/preprocess";
-	"github.com/lootag/ImageAuGomentationCLI/convert";
-	"math";
-	"sync";
+import (
+	"fmt"
+	"github.com/lootag/ImageAuGomentationCLI/convert"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
+	"github.com/lootag/ImageAuGomentationCLI/preprocess"
+	"math"
+	"strconv"
+	"sync"
 )
 
-func batchProcess(options *entities.Options, 
-	imagePaths *[]string, 
+func batchProcess(options *entities.Options,
+	imagePaths *[]string,
 	imageNames *[]string,
 	preprocessor *preprocess.Preprocessor,
-	converter *convert.Converter){
-	pathsToProcess := []string{};
-	namesToProcess := []string{};
-	
-	if (*options).BatchSize > len(*imagePaths){
+	converter *convert.Converter) {
+	pathsToProcess := []string{}
+	namesToProcess := []string{}
+
+	if (*options).BatchSize > len(*imagePaths) {
 		panic("The batch size you've set is larger than the number of elements you intend to process. Exiting.")
 	}
 
-	numberOfBatches := int(math.Floor(float64(len(*imagePaths)))/float64((*options).BatchSize));
-	if len(*imagePaths) % (*options).BatchSize != 0 {
-		numberOfBatches += 1;
+	numberOfBatches := int(math.Floor(float64(len(*imagePaths))) / float64((*options).BatchSize))
+	if len(*imagePaths)%(*options).BatchSize != 0 {
+		numberOfBatches += 1
 	}
-	for index := 0; index < numberOfBatches; index++{
-		if index == numberOfBatches - 1{
-			fmt.Println("Processing batch " + strconv.Itoa(index + 1) + " out of " + strconv.Itoa(numberOfBatches));
-			start := index*(*options).BatchSize;
-			pathsToProcess = (*imagePaths)[start:];
-			namesToProcess = (*imageNames)[start:];
+	for index := 0; index < numberOfBatches; index++ {
+		if index == numberOfBatches-1 {
+			fmt.Println("Processing batch " + strconv.Itoa(index+1) + " out of " + strconv.Itoa(numberOfBatches))
+			start := index * (*options).BatchSize
+			pathsToProcess = (*imagePaths)[start:]
+			namesToProcess = (*imageNames)[start:]
 		} else {
-			fmt.Println("Processing batch " + strconv.Itoa(index + 1) + " out of " + strconv.Itoa(numberOfBatches));
-			start := index*(*options).BatchSize;
-			end := start + (*options).BatchSize;
-			pathsToProcess = (*imagePaths)[start:end];
-			namesToProcess = (*imageNames)[start:end];
+			fmt.Println("Processing batch " + strconv.Itoa(index+1) + " out of " + strconv.Itoa(numberOfBatches))
+			start := index * (*options).BatchSize
+			end := start + (*options).BatchSize
+			pathsToProcess = (*imagePaths)[start:end]
+			namesToProcess = (*imageNames)[start:end]
 		}
 
-		resized := make(chan entities.ImageInfo, (*options).BatchSize);
-		resizedCopy := make(chan entities.ImageInfo, (*options).BatchSize);
+		resized := make(chan entities.ImageInfo, (*options).BatchSize)
+		resizedCopy := make(chan entities.ImageInfo, (*options).BatchSize)
 		resizedAnnotations := make(chan entities.Annotation, (*options).BatchSize)
 		resizedAnnotationsCopy := make(chan entities.Annotation, (*options).BatchSize)
-		resizedRotate := []entities.ImageInfo{};
-		resizedRotateAnnotations := []entities.Annotation{};
-		var wg sync.WaitGroup;
-		wg.Add(2);
-		go (*preprocessor).Preprocess(&pathsToProcess, 
-			&namesToProcess, 
-			resized, 
+		resizedRotate := []entities.ImageInfo{}
+		resizedRotateAnnotations := []entities.Annotation{}
+		var wg sync.WaitGroup
+		wg.Add(2)
+		go (*preprocessor).Preprocess(&pathsToProcess,
+			&namesToProcess,
+			resized,
 			resizedCopy,
 			resizedAnnotations,
 			resizedAnnotationsCopy,
-			(*options).AnnotationType, 
-			(*options).Size, 
-			(*options).Xml, 
-			&wg);
-		go (*converter).ConvertToJPG(resized, &wg, "resize", &pathsToProcess);
-		if (*options).Xml{
-			wg.Add(1);
-			go (*converter).ConvertToText(resizedAnnotations, &wg, (*options).AnnotationType);
+			(*options).AnnotationType,
+			(*options).Size,
+			(*options).Xml,
+			&wg)
+		go (*converter).ConvertToJPG(resized, &wg, "resize", &pathsToProcess)
+		if (*options).Xml {
+			wg.Add(1)
+			go (*converter).ConvertToText(resizedAnnotations, &wg, (*options).AnnotationType)
 		}
-		wg.Wait();
-		for image := range resizedCopy{
-			resizedRotate = append(resizedRotate, image);
+		wg.Wait()
+		for image := range resizedCopy {
+			resizedRotate = append(resizedRotate, image)
 		}
-		for annotation := range resizedAnnotationsCopy{
-			resizedRotateAnnotations = append(resizedRotateAnnotations, annotation);
+		for annotation := range resizedAnnotationsCopy {
+			resizedRotateAnnotations = append(resizedRotateAnnotations, annotation)
 		}
-		resizedBlur := resizedRotate;
-		resizedBlurAnnotations := resizedRotateAnnotations;
-		actions := []string{"rotate", "blur"};
-		rotated := make(chan entities.ImageInfo, (*options).BatchSize);
-		blurred := make(chan entities.ImageInfo, (*options).BatchSize);
+		resizedBlur := resizedRotate
+		resizedBlurAnnotations := resizedRotateAnnotations
+		actions := []string{"rotate", "blur"}
+		rotated := make(chan entities.ImageInfo, (*options).BatchSize)
+		blurred := make(chan entities.ImageInfo, (*options).BatchSize)
 		rotatedAnnotations := make(chan entities.Annotation, (*options).BatchSize)
 		blurredAnnotations := make(chan entities.Annotation, (*options).BatchSize)
-		augmentation, err := AugmentationsFactory(actions[0]);
-		if err != nil{
-			panic(err);
+		augmentation, err := AugmentationsFactory(actions[0])
+		if err != nil {
+			panic(err)
 		}
-		if (*options).Side != entities.NIL_DIRECTION{
+		if (*options).Side != entities.NIL_DIRECTION {
 			wg.Add(2)
 			go augmentation.Augment(&resizedRotate,
-				&resizedRotateAnnotations, 
-				&wg, 
+				&resizedRotateAnnotations,
+				&wg,
 				rotated,
-				rotatedAnnotations, 
-				*options);
-			go (*converter).ConvertToJPG(rotated, &wg, actions[0], &pathsToProcess);
-			if (*options).Xml{
+				rotatedAnnotations,
+				*options)
+			go (*converter).ConvertToJPG(rotated, &wg, actions[0], &pathsToProcess)
+			if (*options).Xml {
 				wg.Add(1)
-				go (*converter).ConvertToText(rotatedAnnotations, &wg, (*options).AnnotationType);
+				go (*converter).ConvertToText(rotatedAnnotations, &wg, (*options).AnnotationType)
 			}
 		}
-		
-		augmentation, err = AugmentationsFactory(actions[1]);
-		if err != nil{
-			panic(err);
+
+		augmentation, err = AugmentationsFactory(actions[1])
+		if err != nil {
+			panic(err)
 		}
-		
-		if (*options).Sigma != 0{
+
+		if (*options).Sigma != 0 {
 			wg.Add(2)
 			go augmentation.Augment(&resizedBlur,
 				&resizedBlurAnnotations,
-				&wg, 
+				&wg,
 				blurred,
-				blurredAnnotations, 
-				*options);
-			go (*converter).ConvertToJPG(blurred, &wg, actions[1], &pathsToProcess);
-			if (*options).Xml{
+				blurredAnnotations,
+				*options)
+			go (*converter).ConvertToJPG(blurred, &wg, actions[1], &pathsToProcess)
+			if (*options).Xml {
 				wg.Add(1)
-				go (*converter).ConvertToText(blurredAnnotations, &wg, (*options).AnnotationType);
+				go (*converter).ConvertToText(blurredAnnotations, &wg, (*options).AnnotationType)
 			}
 		}
 
-		wg.Wait();
+		wg.Wait()
 
 	}
-	
+
 }

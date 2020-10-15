@@ -1,12 +1,12 @@
 package preprocess
 
 import (
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 	"image"
 	_ "image/jpeg"
 	_ "image/png"
 	"os"
 	"sync"
-	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
 func checkAllFilesAreImagesWorker(file string,
@@ -21,19 +21,19 @@ func checkAllFilesAreImagesWorker(file string,
 	if err != nil {
 		panic("There was a problem opening the file " + file)
 	}
-	defer imageFile.Close();
+	defer imageFile.Close()
 	decodedImage, _, err := image.Decode(imageFile)
 
 	if err != nil {
 		panic(err)
 	}
 
-	var imageInfo entities.ImageInfo;
-	imageInfo.OriginalFileName = fileName;
-	imageInfo.ImageSource = decodedImage;
+	var imageInfo entities.ImageInfo
+	imageInfo.OriginalFileName = fileName
+	imageInfo.ImageSource = decodedImage
 
 	if imageFormat == "jpg" || imageFormat == "png" {
-		checked <- imageInfo;
+		checked <- imageInfo
 	} else {
 		panic("The file " + file + " is not an image, or its format is not supported")
 	}

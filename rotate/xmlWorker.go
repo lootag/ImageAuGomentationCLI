@@ -1,14 +1,14 @@
-package rotate;
+package rotate
 
-import(
-	"sync";
-	"github.com/lootag/ImageAuGomentationCLI/entities";
+import (
+	"github.com/lootag/ImageAuGomentationCLI/entities"
+	"sync"
 )
 
-func xmlWorker(originalHeight int, 
+func xmlWorker(originalHeight int,
 	originalWidth int,
 	newSize int,
 	originalBoundingBox entities.BoundingBox,
-	rotateWaitGroup *sync.WaitGroup){
-	defer (*rotateWaitGroup).Done();
+	rotateWaitGroup *sync.WaitGroup) {
+	defer (*rotateWaitGroup).Done()
 }

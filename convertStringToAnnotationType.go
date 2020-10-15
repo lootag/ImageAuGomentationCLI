@@ -1,14 +1,14 @@
-package main;
+package main
 
-import(
-	"github.com/lootag/ImageAuGomentationCLI/entities";
-	"errors";
+import (
+	"errors"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
-func convertStringToAnnotationType(argument string) (entities.AnnotationType, error){
+func convertStringToAnnotationType(argument string) (entities.AnnotationType, error) {
 	switch argument {
 	case "pascalvoc":
-		return entities.PASCAL_VOC, nil;
+		return entities.PASCAL_VOC, nil
 	}
-	return entities.NIL_ANNOTATION, errors.New("The rotation you've specified is not supported.");
+	return entities.NIL_ANNOTATION, errors.New("The rotation you've specified is not supported.")
 }

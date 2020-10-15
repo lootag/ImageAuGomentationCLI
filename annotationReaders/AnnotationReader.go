@@ -1,10 +1,10 @@
-package annotationReaders;
+package annotationReaders
 
-import(
-	"sync";
-	"github.com/lootag/ImageAuGomentationCLI/entities";
+import (
+	"github.com/lootag/ImageAuGomentationCLI/entities"
+	"sync"
 )
 
-type AnnotationReader interface{
-	Read(filePath string, inputAnnotations chan entities.Annotation, wg *sync.WaitGroup);
+type AnnotationReader interface {
+	Read(filePath string, inputAnnotations chan entities.Annotation, wg *sync.WaitGroup)
 }

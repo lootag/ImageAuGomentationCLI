@@ -1,8 +1,8 @@
-package entities;
+package entities
 
-type AnnotationType int;
+type AnnotationType int
 
 const (
-	PASCAL_VOC AnnotationType = 0;	
-	NIL_ANNOTATION AnnotationType =1;
+	PASCAL_VOC     AnnotationType = 0
+	NIL_ANNOTATION AnnotationType = 1
 )

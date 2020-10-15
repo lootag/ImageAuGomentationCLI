@@ -1,11 +1,11 @@
-package entities;
+package entities
 
-import(
-	"image";
+import (
+	"image"
 )
 
-type ImageInfo struct{
-	ImageSource image.Image;
-	OriginalFileName string;
-	NewName string;
+type ImageInfo struct {
+	ImageSource      image.Image
+	OriginalFileName string
+	NewName          string
 }

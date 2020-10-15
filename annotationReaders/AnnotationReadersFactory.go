@@ -1,18 +1,17 @@
-package annotationReaders;
+package annotationReaders
 
-import(
-	"github.com/lootag/ImageAuGomentationCLI/entities";
-	"errors";
+import (
+	"errors"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
-type AnnotationReadersFactory struct{
-
+type AnnotationReadersFactory struct {
 }
 
-func (annotationReadersFactory AnnotationReadersFactory) Create(annotationType entities.AnnotationType) (AnnotationReader, error){
+func (annotationReadersFactory AnnotationReadersFactory) Create(annotationType entities.AnnotationType) (AnnotationReader, error) {
 
-	if annotationType == entities.PASCAL_VOC{
-		return PascalVocReader{}, nil;
+	if annotationType == entities.PASCAL_VOC {
+		return PascalVocReader{}, nil
 	}
 
 	return nil, errors.New("The annotation type you've specified is not supported. Exiting.")

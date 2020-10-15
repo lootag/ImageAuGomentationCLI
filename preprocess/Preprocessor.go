@@ -1,12 +1,12 @@
 package preprocess
 
 import (
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 	"sync"
-	"github.com/lootag/ImageAuGomentationCLI/entities";
 )
 
 type Preprocessor interface {
-	Preprocess(images *[]string, 
+	Preprocess(images *[]string,
 		fileNames *[]string,
 		toAugment chan entities.ImageInfo,
 		toAugmentCopy chan entities.ImageInfo,
