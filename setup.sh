@@ -2,9 +2,9 @@
 read -p "Enter your machine's password: " PASSWORD
 read -p "Enter your machine's kernel(Linux/Darwin): " KERNEL
 which brew
-if [ $? == 0 ] && [ $KERNEL == "Darwin" ]; then
+if [ $? != 0 ] && [ $KERNEL == "Darwin" ]; then
     # Install Homebrew
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+    ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
 
 which go    
