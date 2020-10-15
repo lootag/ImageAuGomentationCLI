@@ -9,9 +9,9 @@ fi
 
 which go    
 # Install Go
-if [ $? == 0 ] && [ $KERNEL == "Darwin" ]; then
+if [ $? != 0 ] && [ $KERNEL == "Darwin" ]; then
     echo $PASSWORD | sudo -S brew install golang
-else if [ $? == 0 ] && [ $KERNEL == "Linux" ]; then
+else if [ $? != 0 ] && [ $KERNEL == "Linux" ]; then
     echo $PASSWORD | sudo -S apt-get install golang
     fi
 fi
