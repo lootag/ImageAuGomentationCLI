@@ -5,6 +5,7 @@ import (
 	"github.com/lootag/ImageAuGomentationCLI/convert"
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 	"github.com/lootag/ImageAuGomentationCLI/preprocess"
+	"github.com/lootag/ImageAuGomentationCLI/collectGarbage"
 	"math"
 	"strconv"
 	"sync"
@@ -14,7 +15,9 @@ func batchProcess(options *entities.Options,
 	imagePaths *[]string,
 	imageNames *[]string,
 	preprocessor *preprocess.Preprocessor,
-	converter *convert.Converter) {
+	converter *convert.Converter,
+	garbageCollector *collectGarbage.GarbageCollector,
+	classesToExclude []string) {
 	pathsToProcess := []string{}
 	namesToProcess := []string{}
 
@@ -57,6 +60,7 @@ func batchProcess(options *entities.Options,
 			(*options).InAnnotationType,
 			(*options).Size,
 			(*options).Xml,
+			classesToExclude,
 			&wg)
 		go (*converter).ConvertToJPG(resized, &wg, "resize", &pathsToProcess)
 		if (*options).Xml {
@@ -117,6 +121,7 @@ func batchProcess(options *entities.Options,
 		}
 
 		wg.Wait()
+		(*garbageCollector).CollectGarbage()
 
 	}
 

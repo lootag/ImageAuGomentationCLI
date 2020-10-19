@@ -3,6 +3,8 @@ github.com/disintegration/imaging v1.6.2 h1:w1LecBlG2Lnp8B3jk5zSuNqd7b4DXhcjwek1
 github.com/disintegration/imaging v1.6.2/go.mod h1:44/5580QXChDfwIclfc/PCwrr44amcmDAg8hxG0Ewe4=
 github.com/golobby/container v1.3.0 h1:Pgk8fK9fJHuZqU924Bl8+DY2/n9jCUtsSKfiOctdQ9A=
 github.com/golobby/container v1.3.0/go.mod h1:6yAH4QK+Hi8HxGuCJuAGiqS/a5n8YP+4bXNpPdKzLVM=
+github.com/juliangruber/go-intersect v1.0.0 h1:0XNPNaEoPd7PZljVNZLk4qrRkR153Sjk2ZL1426zFQ0=
+github.com/juliangruber/go-intersect v1.0.0/go.mod h1:unIef4vysSJvZ6adJAAPiBVKpS4r/IOkmfuFghRFDDM=
 github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646 h1:zYyBkD/k9seD2A7fsi6Oo2LfFZAehjjQMERAvZLEDnQ=
 github.com/nfnt/resize v0.0.0-20180221191011-83c6a9932646/go.mod h1:jpp1/29i3P1S/RLdc7JQKbRpFeM1dOBd8T9ki5s+AY8=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=

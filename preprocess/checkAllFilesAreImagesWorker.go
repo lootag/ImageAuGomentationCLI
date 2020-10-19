@@ -1,6 +1,7 @@
 package preprocess
 
 import (
+	"fmt"
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 	"image"
 	_ "image/jpeg"
@@ -25,7 +26,7 @@ func checkAllFilesAreImagesWorker(file string,
 	decodedImage, _, err := image.Decode(imageFile)
 
 	if err != nil {
-		panic(err)
+		panic("Couldn't decode " + file)
 	}
 
 	var imageInfo entities.ImageInfo
@@ -35,7 +36,7 @@ func checkAllFilesAreImagesWorker(file string,
 	if imageFormat == "jpg" || imageFormat == "png" {
 		checked <- imageInfo
 	} else {
-		panic("The file " + file + " is not an image, or its format is not supported")
+		fmt.Println("The file " + file + " is not an image, or its format is not supported. Ignoring.")
 	}
 
 }

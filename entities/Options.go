@@ -8,4 +8,6 @@ type Options struct {
 	BatchSize      int
 	InAnnotationType AnnotationType
 	OutAnnotationType AnnotationType
+	ExclusionThreshold int
+	UserDefinedExclusions []string
 }

@@ -15,5 +15,6 @@ type Preprocessor interface {
 		annotationType entities.AnnotationType,
 		size int,
 		xmls bool,
+		classesToExclude []string,
 		wg *sync.WaitGroup)
 }

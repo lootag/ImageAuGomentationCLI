@@ -19,6 +19,7 @@ func (preprocessingService PreprocessingService) Preprocess(images *[]string,
 	annotationType entities.AnnotationType,
 	size int,
 	xmls bool,
+	classesToExclude []string,
 	mainWaitGroup *sync.WaitGroup) {
 	defer (*mainWaitGroup).Done()
 	var wg sync.WaitGroup
@@ -28,7 +29,7 @@ func (preprocessingService PreprocessingService) Preprocess(images *[]string,
 
 	wg.Add(2)
 	go checkAllFilesAreImages(images, fileNames, checked, &wg)
-	go resizing(checked, resized, resizedCopy, size, &wg)
+	go resizeNotAnnotatedImages(checked, resized, resizedCopy, size, &wg)
 	if xmls {
 		wg.Add(3)
 		go checkAllImagesAreAnnotated(fileNames,
@@ -42,6 +43,7 @@ func (preprocessingService PreprocessingService) Preprocess(images *[]string,
 			resizedAnnotations,
 			resizedAnnotationsCopy,
 			size,
+			classesToExclude,
 			&wg)
 	}
 	wg.Wait()
@@ -104,19 +106,23 @@ func resizeAnnotations(annotationsToResize chan entities.Annotation,
 	resizedAnnotations chan entities.Annotation,
 	resizeAnnotationsCopy chan entities.Annotation,
 	newSize int,
+	classesToExclude []string,
 	preprocessWaitGroup *sync.WaitGroup) {
 	defer (*preprocessWaitGroup).Done()
 	var wg sync.WaitGroup
 	for annotation := range annotationsToResize {
-		wg.Add(1)
-		go resizeAnnotationWorker(annotation, resizedAnnotations, resizeAnnotationsCopy, newSize, &wg)
+		intersection := intersectStringArrays(annotation.Classes, classesToExclude)
+		if len(intersection) == 0 {
+			wg.Add(1)
+			go resizeAnnotationWorker(annotation, resizedAnnotations, resizeAnnotationsCopy, newSize, &wg)
+		}
 	}
 	wg.Wait()
 	close(resizedAnnotations)
 	close(resizeAnnotationsCopy)
 }
 
-func resizing(checked chan entities.ImageInfo,
+func resizeNotAnnotatedImages(checked chan entities.ImageInfo,
 	resized chan entities.ImageInfo,
 	resizedCopy chan entities.ImageInfo,
 	size int,
@@ -131,4 +137,23 @@ func resizing(checked chan entities.ImageInfo,
 	close(resized)
 	close(resizedCopy)
 
+}
+
+func intersectStringArrays(stringArray1 []string, stringArray2 []string) []string{
+	intersection := []string{}
+	for stringArrayIndex1 := range stringArray1{
+		if contains(stringArray2, stringArray1[stringArrayIndex1]){
+			intersection = append(intersection, stringArray1[stringArrayIndex1])
+		}
+	}
+	return intersection;
+}
+
+func contains(stringArray1 []string, toCheck string) bool{
+	for stringIndex := range stringArray1{
+		if stringArray1[stringIndex] == toCheck{
+			return true
+		}
+	}
+	return false;
 }
