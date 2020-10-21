@@ -18,25 +18,25 @@ func (preprocessingService PreprocessingService) Preprocess(images *[]string,
 	resizedAnnotationsCopy chan entities.Annotation,
 	annotationType entities.AnnotationType,
 	size int,
-	xmls bool,
+	annotated bool,
 	classesToExclude []string,
 	mainWaitGroup *sync.WaitGroup) {
 	defer (*mainWaitGroup).Done()
 	var wg sync.WaitGroup
-	checked := make(chan entities.ImageInfo)
-	checkedAnnotations := make(chan string)
+	validatedImages := make(chan entities.ImageInfo)
+	validatedAnnotations := make(chan string)
 	annotationsToResize := make(chan entities.Annotation)
 
 	wg.Add(2)
-	go checkAllFilesAreImages(images, fileNames, checked, &wg)
-	go resizeNotAnnotatedImages(checked, resized, resizedCopy, size, &wg)
-	if xmls {
+	go checkAllFilesAreImages(images, fileNames, validatedImages, &wg)
+	go resizeImages(validatedImages, resized, resizedCopy, size, &wg)
+	if annotated {
 		wg.Add(3)
 		go checkAllImagesAreAnnotated(fileNames,
 			&wg,
-			checkedAnnotations)
+			validatedAnnotations)
 		go readAnnotations(annotationType,
-			checkedAnnotations,
+			validatedAnnotations,
 			&wg,
 			annotationsToResize)
 		go resizeAnnotations(annotationsToResize,
@@ -122,7 +122,7 @@ func resizeAnnotations(annotationsToResize chan entities.Annotation,
 	close(resizeAnnotationsCopy)
 }
 
-func resizeNotAnnotatedImages(checked chan entities.ImageInfo,
+func resizeImages(checked chan entities.ImageInfo,
 	resized chan entities.ImageInfo,
 	resizedCopy chan entities.ImageInfo,
 	size int,
@@ -142,14 +142,14 @@ func resizeNotAnnotatedImages(checked chan entities.ImageInfo,
 func intersectStringArrays(stringArray1 []string, stringArray2 []string) []string{
 	intersection := []string{}
 	for stringArrayIndex1 := range stringArray1{
-		if contains(stringArray2, stringArray1[stringArrayIndex1]){
+		if stringArraycontains(stringArray2, stringArray1[stringArrayIndex1]){
 			intersection = append(intersection, stringArray1[stringArrayIndex1])
 		}
 	}
 	return intersection;
 }
 
-func contains(stringArray1 []string, toCheck string) bool{
+func stringArraycontains(stringArray1 []string, toCheck string) bool{
 	for stringIndex := range stringArray1{
 		if stringArray1[stringIndex] == toCheck{
 			return true

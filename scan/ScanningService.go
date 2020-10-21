@@ -13,8 +13,9 @@ type ScanningService struct{
 	
 }
 
-func (scanningService ScanningService) Scan(annotationType entities.AnnotationType){
-	annotationsToRead := getAnnotationPaths();
+func (scanningService ScanningService) Scan(annotationType entities.AnnotationType,
+	folderToScan string){
+	annotationsToRead := getAnnotationPaths(folderToScan);
 	annotationsToGroup := readAnnotations(annotationType, annotationsToRead);
 	countMap := getCountMap(annotationsToGroup);
 	fmt.Println("Here's a scan of your data: ")
@@ -23,15 +24,15 @@ func (scanningService ScanningService) Scan(annotationType entities.AnnotationTy
 	}
 }
 
-func getAnnotationPaths() []string{
+func getAnnotationPaths(folderToScan string) []string{
 		annotationsToRead := []string{}
-		root := "./Annotations"
+		root := folderToScan + "/Annotations"
 		fileInfos, err := ioutil.ReadDir(root)
 		if err != nil{
 			panic(err);
 		}
 		for fileInfoIndex := range fileInfos{
-			annotationsToRead = append(annotationsToRead, "./Annotations/" + fileInfos[fileInfoIndex].Name(), );
+			annotationsToRead = append(annotationsToRead, folderToScan + "/Annotations/" + fileInfos[fileInfoIndex].Name(), );
 		}
 		return annotationsToRead;
 }

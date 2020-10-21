@@ -71,9 +71,12 @@ func batchProcess(options *entities.Options,
 		for image := range resizedCopy {
 			resizedRotate = append(resizedRotate, image)
 		}
-		for annotation := range resizedAnnotationsCopy {
-			resizedRotateAnnotations = append(resizedRotateAnnotations, annotation)
+		if (*options).Xml{
+			for annotation := range resizedAnnotationsCopy {
+				resizedRotateAnnotations = append(resizedRotateAnnotations, annotation)
+			}
 		}
+		
 		resizedBlur := resizedRotate
 		resizedBlurAnnotations := resizedRotateAnnotations
 		actions := []string{"rotate", "blur"}
@@ -121,7 +124,9 @@ func batchProcess(options *entities.Options,
 		}
 
 		wg.Wait()
-		(*garbageCollector).CollectGarbage()
+		if (*options).Xml {
+			(*garbageCollector).CollectGarbage()
+		}
 
 	}
 

@@ -27,10 +27,10 @@ func main() {
 	var excluder exclusion.Excluder
 	var garbageCollector collectGarbage.GarbageCollector
 	var scanner scan.Scanner
-	resolve(&preprocessor, &converter, &excluder, &garbageCollector, &scanner)
+	resolveDependencies(&preprocessor, &converter, &excluder, &garbageCollector, &scanner)
 
 	folderPtr := flag.String("folder", ".", "The directory where you want to run the utility.")
-	rotatePtr := flag.String("rotate", "all", "Values: 'all', 'left', 'right', 'flip'.")
+	rotatePtr := flag.String("rotate", "all", "The rotations you want to apply to the images. Set to 'skip' in order not to perform any rotations. Values: 'all', 'left', 'right', 'flip', 'skip'.")
 	userDefinedExclusionsPtr := flag.String("user_defined_exclusions", "", "The classes you decide to exclude manually, separated by ';'.")
 	inputannotationTypePtr := flag.String("in_annotationtype", "pascalvoc", "Values: 'pascalvoc'")
 	outputannotationTypePtr := flag.String("out_annotationtype", "pascalvoc", "Values: 'pascalvoc'")
@@ -39,9 +39,8 @@ func main() {
 	sizePtr := flag.Int("size", 464, "The height and width to which you intend to resize your images.")
 	exclusionThresholdPtr := flag.Int("exclusion_threshold", 10, "The minimum number of instances of a class in order for it not to be excluded.")
 	xmlPtr := flag.Bool("annotations", true, "Whether the images are annotated or not")
-	flag.Parse()
-
-	
+	scanPtr := flag.Bool("scan", false, "Whether you want to scan the data")
+	flag.Parse()	
 
 	var options entities.Options
 	side, err := convertStringToDirection(*rotatePtr)
@@ -66,8 +65,8 @@ func main() {
 	options.OutAnnotationType = outAnnotationType
 	options.UserDefinedExclusions = getUserDefinedExclusions(*userDefinedExclusionsPtr);
 
-	if os.Args[1] == "scan"{
-		scanner.Scan(options.InAnnotationType)
+	if *scanPtr {
+		scanner.Scan(options.InAnnotationType, *folderPtr)
 		os.Exit(0);
 	}
 
@@ -85,7 +84,7 @@ func main() {
 	
 }
 
-func resolve(preprocessor *preprocess.Preprocessor,
+func resolveDependencies(preprocessor *preprocess.Preprocessor,
 	converter *convert.Converter,
 	excluder *exclusion.Excluder,
 	garbageCollector *collectGarbage.GarbageCollector,

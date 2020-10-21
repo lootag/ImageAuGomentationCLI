@@ -5,5 +5,5 @@ import(
 )
 
 type Scanner interface{
-	Scan(annotationType entities.AnnotationType);
+	Scan(annotationType entities.AnnotationType, folderToScan string);
 }
