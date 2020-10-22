@@ -31,7 +31,7 @@ The augoment command needs to be run in a directory that has two subdirectories:
 
 By default, the command will run in the current directory, that is ```.```. If you wish to run it in a directory other than ```.``` you'll need to specify a value for the ```-folder``` argument. 
 #### 1) Scan your dataset
-The first thing you might want to do is get a picture of your dataset. You can do this running 
+The first thing you might want to do is get a picture of your dataset. You can do this by running 
 ```$> augoment -scan -folder="/path/to/folder/"```. 
 This will print a list of all the classes in your dataset, with their corresponding number of instances. 
 It's important to note that at the moment the utility only supports PASCAL_VOC. However, implementing readers and writers for your own custom format is pretty straightforward.
