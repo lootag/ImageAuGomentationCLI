@@ -29,8 +29,8 @@ import (
 )
 
 func batchProcess(options *entities.Options,
-	imagePaths *[]string,
-	imageNames *[]string,
+	imagePaths []string,
+	imageNames []string,
 	preprocessor *preprocess.Preprocessor,
 	converter *convert.Converter,
 	garbageCollector *collectGarbage.GarbageCollector,
@@ -38,26 +38,26 @@ func batchProcess(options *entities.Options,
 	pathsToProcess := []string{}
 	namesToProcess := []string{}
 
-	if (*options).BatchSize > len(*imagePaths) {
+	if (*options).BatchSize > len(imagePaths) {
 		panic("The batch size you've set is larger than the number of elements you intend to process. Exiting.")
 	}
 
-	numberOfBatches := int(math.Floor(float64(len(*imagePaths))) / float64((*options).BatchSize))
-	if len(*imagePaths)%(*options).BatchSize != 0 {
+	numberOfBatches := int(math.Floor(float64(len(imagePaths))) / float64((*options).BatchSize))
+	if len(imagePaths)%(*options).BatchSize != 0 {
 		numberOfBatches += 1
 	}
 	for index := 0; index < numberOfBatches; index++ {
 		if index == numberOfBatches-1 {
 			fmt.Println("Processing batch " + strconv.Itoa(index+1) + " out of " + strconv.Itoa(numberOfBatches))
 			start := index * (*options).BatchSize
-			pathsToProcess = (*imagePaths)[start:]
-			namesToProcess = (*imageNames)[start:]
+			pathsToProcess = imagePaths[start:]
+			namesToProcess = imageNames[start:]
 		} else {
 			fmt.Println("Processing batch " + strconv.Itoa(index+1) + " out of " + strconv.Itoa(numberOfBatches))
 			start := index * (*options).BatchSize
 			end := start + (*options).BatchSize
-			pathsToProcess = (*imagePaths)[start:end]
-			namesToProcess = (*imageNames)[start:end]
+			pathsToProcess = imagePaths[start:end]
+			namesToProcess = imageNames[start:end]
 		}
 
 		resized := make(chan entities.ImageInfo, (*options).BatchSize)
