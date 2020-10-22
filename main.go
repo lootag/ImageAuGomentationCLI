@@ -92,8 +92,8 @@ func main() {
 	fmt.Println("All images containing the following classes will be excluded: ")
 	fmt.Println(classesToExclude)
 	batchProcess(&options,
-		&imagePaths,
-		&imageNames,
+		imagePaths,
+		imageNames,
 		&preprocessor,
 		&converter,
 		&garbageCollector,
