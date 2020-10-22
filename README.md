@@ -55,8 +55,14 @@ As of right now, the utility will allow you to:
 
 It's important to note that all images will also be resized. You can specify the size through the ```-size``` command-line-argument (height and width will be the equal). The default value is 464. 
 These actions are controlled by the  ```-rotate``` and ```-blur``` command-line arguments. If you don't specify any value for these arguments,  all augmentations will be performed.
+
+
 By setting the ```-exlusion_threshold``` argument, you can exclude from your augmented dataset the images which contain classes whose number of instances is less than a certain threshold. 
-If you want to manually exclude some classes from the augmented dataset, you can specify the ```-user_defined_exclusions``` argument (Ex. ```user_defined_exclusions="class1;class2;"```.
+
+
+If you want to manually exclude some classes from the augmented dataset, you can specify the ```-user_defined_exclusions``` argument (Ex. ```user_defined_exclusions="class1;class2;"```).
+
+
 By default, the utility will assume that your dataset is annotated, and will therefore augment your annotations too. If you only wish to augment your images, you can simply set ```-annotations=false```.
 
 
