@@ -1,9 +1,10 @@
 package blur
 
 import (
+	"sync"
+
 	"github.com/disintegration/imaging"
 	"github.com/lootag/ImageAuGomentationCLI/entities"
-	"sync"
 )
 
 func blurImageWorker(imageToBlur entities.ImageInfo,
@@ -11,9 +12,9 @@ func blurImageWorker(imageToBlur entities.ImageInfo,
 	augmented chan entities.ImageInfo,
 	sigma float64) {
 	defer (*blurWaitGroup).Done()
-	var dstImage entities.ImageInfo
-	dstImage.ImageSource = imaging.Blur(imageToBlur.ImageSource, sigma)
-	dstImage.OriginalFileName = imageToBlur.OriginalFileName
-	dstImage.NewName = "blur" + imageToBlur.OriginalFileName
-	augmented <- dstImage
+	var blurredImage entities.ImageInfo
+	blurredImage.ImageSource = imaging.Blur(imageToBlur.ImageSource, sigma)
+	blurredImage.OriginalFileName = imageToBlur.OriginalFileName
+	blurredImage.NewName = "blur" + imageToBlur.OriginalFileName
+	augmented <- blurredImage
 }

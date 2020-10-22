@@ -1,15 +1,16 @@
 package blur
 
 import (
-	"github.com/lootag/ImageAuGomentationCLI/entities"
 	"sync"
+
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
 type BlurService struct {
 }
 
-func (blurService BlurService) Augment(imagesToAugment *[]entities.ImageInfo,
-	annotationsToAugment *[]entities.Annotation,
+func (blurService BlurService) Augment(imagesToAugment []entities.ImageInfo,
+	annotationsToAugment []entities.Annotation,
 	mainWaitGroup *sync.WaitGroup,
 	augmentedImages chan entities.ImageInfo,
 	augmentedAnnotations chan entities.Annotation,
@@ -23,12 +24,12 @@ func (blurService BlurService) Augment(imagesToAugment *[]entities.ImageInfo,
 		augmentedImages,
 		augmentedAnnotations,
 		options.Sigma,
-		options.Xml)
+		options.Annotated)
 	wg.Wait()
 }
 
-func blur(imagesToBlur *[]entities.ImageInfo,
-	annotationsToBlur *[]entities.Annotation,
+func blur(imagesToBlur []entities.ImageInfo,
+	annotationsToBlur []entities.Annotation,
 	blurWaitGroup *sync.WaitGroup,
 	augmentedImages chan entities.ImageInfo,
 	augmentedAnnotations chan entities.Annotation,
@@ -36,14 +37,14 @@ func blur(imagesToBlur *[]entities.ImageInfo,
 	annotated bool) {
 	defer (*blurWaitGroup).Done()
 	var wg sync.WaitGroup
-	for imageIndex := range *imagesToBlur {
+	for imageIndex := range imagesToBlur {
 		wg.Add(1)
-		go blurImageWorker((*imagesToBlur)[imageIndex], &wg, augmentedImages, sigma)
+		go blurImageWorker(imagesToBlur[imageIndex], &wg, augmentedImages, sigma)
 	}
 	if annotated {
-		for annotationIndex := range *annotationsToBlur {
+		for annotationIndex := range annotationsToBlur {
 			wg.Add(1)
-			go blurAnnotationWorker((*annotationsToBlur)[annotationIndex], augmentedAnnotations, &wg)
+			go blurAnnotationWorker(annotationsToBlur[annotationIndex], augmentedAnnotations, &wg)
 		}
 	}
 

@@ -61,7 +61,7 @@ These actions are controlled by the  ```-rotate``` and ```-blur``` command-line 
 By setting the ```-exlusion_threshold``` argument, you can exclude from your augmented dataset the images which contain classes whose number of instances is less than a certain threshold. 
 
 
-If you want to manually exclude some classes from the augmented dataset, you can specify the ```-user_defined_exclusions``` argument (Ex. ```-user_defined_exclusions="class1;class2;"```).
+If you want to manually exclude some classes from the augmented dataset, you can specify the ```-user_defined_exclusions``` argument (Ex. ```-  user_defined_exclusions="class1;class2;"```).
 
 
 By default, the utility will assume that your dataset is annotated, and will therefore augment your annotations too. If you only wish to augment your images, you can simply set ```-annotations=false```.

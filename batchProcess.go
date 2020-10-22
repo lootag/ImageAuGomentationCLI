@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/lootag/ImageAuGomentationCLI/convert"
-	"github.com/lootag/ImageAuGomentationCLI/entities"
-	"github.com/lootag/ImageAuGomentationCLI/preprocess"
-	"github.com/lootag/ImageAuGomentationCLI/collectGarbage"
 	"math"
 	"strconv"
 	"sync"
+
+	"github.com/lootag/ImageAuGomentationCLI/collectGarbage"
+	"github.com/lootag/ImageAuGomentationCLI/convert"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
+	"github.com/lootag/ImageAuGomentationCLI/preprocess"
 )
 
 func batchProcess(options *entities.Options,
@@ -51,19 +52,19 @@ func batchProcess(options *entities.Options,
 		resizedRotateAnnotations := []entities.Annotation{}
 		var wg sync.WaitGroup
 		wg.Add(2)
-		go (*preprocessor).Preprocess(&pathsToProcess,
-			&namesToProcess,
+		go (*preprocessor).Preprocess(pathsToProcess,
+			namesToProcess,
 			resized,
 			resizedCopy,
 			resizedAnnotations,
 			resizedAnnotationsCopy,
 			(*options).InAnnotationType,
 			(*options).Size,
-			(*options).Xml,
+			(*options).Annotated,
 			classesToExclude,
 			&wg)
-		go (*converter).ConvertToJPG(resized, &wg, "resize", &pathsToProcess)
-		if (*options).Xml {
+		go (*converter).ConvertToJPG(resized, &wg)
+		if (*options).Annotated {
 			wg.Add(1)
 			go (*converter).ConvertToText(resizedAnnotations, &wg, (*options).OutAnnotationType)
 		}
@@ -71,12 +72,12 @@ func batchProcess(options *entities.Options,
 		for image := range resizedCopy {
 			resizedRotate = append(resizedRotate, image)
 		}
-		if (*options).Xml{
+		if (*options).Annotated {
 			for annotation := range resizedAnnotationsCopy {
 				resizedRotateAnnotations = append(resizedRotateAnnotations, annotation)
 			}
 		}
-		
+
 		resizedBlur := resizedRotate
 		resizedBlurAnnotations := resizedRotateAnnotations
 		actions := []string{"rotate", "blur"}
@@ -88,16 +89,16 @@ func batchProcess(options *entities.Options,
 		if err != nil {
 			panic(err)
 		}
-		if (*options).Side != entities.NIL_DIRECTION {
+		if (*options).Direction != entities.NIL_DIRECTION {
 			wg.Add(2)
-			go augmentation.Augment(&resizedRotate,
-				&resizedRotateAnnotations,
+			go augmentation.Augment(resizedRotate,
+				resizedRotateAnnotations,
 				&wg,
 				rotated,
 				rotatedAnnotations,
 				*options)
-			go (*converter).ConvertToJPG(rotated, &wg, actions[0], &pathsToProcess)
-			if (*options).Xml {
+			go (*converter).ConvertToJPG(rotated, &wg)
+			if (*options).Annotated {
 				wg.Add(1)
 				go (*converter).ConvertToText(rotatedAnnotations, &wg, (*options).OutAnnotationType)
 			}
@@ -110,21 +111,21 @@ func batchProcess(options *entities.Options,
 
 		if (*options).Sigma != 0 {
 			wg.Add(2)
-			go augmentation.Augment(&resizedBlur,
-				&resizedBlurAnnotations,
+			go augmentation.Augment(resizedBlur,
+				resizedBlurAnnotations,
 				&wg,
 				blurred,
 				blurredAnnotations,
 				*options)
-			go (*converter).ConvertToJPG(blurred, &wg, actions[1], &pathsToProcess)
-			if (*options).Xml {
+			go (*converter).ConvertToJPG(blurred, &wg)
+			if (*options).Annotated {
 				wg.Add(1)
 				go (*converter).ConvertToText(blurredAnnotations, &wg, (*options).OutAnnotationType)
 			}
 		}
 
 		wg.Wait()
-		if (*options).Xml {
+		if (*options).Annotated {
 			(*garbageCollector).CollectGarbage()
 		}
 

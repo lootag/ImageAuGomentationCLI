@@ -1,13 +1,13 @@
 package entities
 
 type Options struct {
-	Size           int
-	Side           Direction
-	Sigma          float64
-	Xml            bool
-	BatchSize      int
-	InAnnotationType AnnotationType
-	OutAnnotationType AnnotationType
-	ExclusionThreshold int
+	Size                  int
+	Direction             Direction
+	Sigma                 float64
+	Annotated             bool
+	BatchSize             int
+	InAnnotationType      AnnotationType
+	OutAnnotationType     AnnotationType
+	ExclusionThreshold    int
 	UserDefinedExclusions []string
 }

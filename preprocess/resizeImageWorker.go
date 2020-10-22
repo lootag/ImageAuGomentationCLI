@@ -1,14 +1,15 @@
 package preprocess
 
 import (
+	"sync"
+
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 	"github.com/nfnt/resize"
-	"sync"
 )
 
-func resizeWorker(decodedImage entities.ImageInfo,
-	resized chan entities.ImageInfo,
-	resizedCopy chan entities.ImageInfo,
+func resizeImageWorker(decodedImage entities.ImageInfo,
+	resizedImage chan entities.ImageInfo,
+	resizedImageCopy chan entities.ImageInfo,
 	wg *sync.WaitGroup,
 	size int) {
 	defer (*wg).Done()
@@ -16,6 +17,6 @@ func resizeWorker(decodedImage entities.ImageInfo,
 	imageInfo.OriginalFileName = decodedImage.OriginalFileName
 	imageInfo.NewName = "resized" + decodedImage.OriginalFileName
 	imageInfo.ImageSource = resize.Resize(uint(size), uint(size), decodedImage.ImageSource, resize.Lanczos3)
-	resized <- imageInfo
-	resizedCopy <- imageInfo
+	resizedImage <- imageInfo
+	resizedImageCopy <- imageInfo
 }

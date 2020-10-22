@@ -2,6 +2,7 @@ package annotationReaders
 
 import (
 	"errors"
+
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 

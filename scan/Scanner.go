@@ -1,9 +1,9 @@
-package scan;
+package scan
 
-import(
+import (
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
-type Scanner interface{
-	Scan(annotationType entities.AnnotationType, folderToScan string);
+type Scanner interface {
+	Scan(annotationType entities.AnnotationType, folderToScan string)
 }

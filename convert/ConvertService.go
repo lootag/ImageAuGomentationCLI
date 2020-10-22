@@ -1,19 +1,18 @@
 package convert
 
 import (
-	"github.com/lootag/ImageAuGomentationCLI/annotationWriters"
-	"github.com/lootag/ImageAuGomentationCLI/entities"
 	"os"
 	"sync"
+
+	"github.com/lootag/ImageAuGomentationCLI/annotationWriters"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
 type ConvertService struct {
 }
 
 func (convertSerivce ConvertService) ConvertToJPG(toConvert chan entities.ImageInfo,
-	mainWaitGroup *sync.WaitGroup,
-	action string,
-	fileNames *[]string) {
+	mainWaitGroup *sync.WaitGroup) {
 	defer (*mainWaitGroup).Done()
 	var wg sync.WaitGroup
 	err := os.Mkdir("./AugmentedImages", 0755)
@@ -26,7 +25,7 @@ func (convertSerivce ConvertService) ConvertToJPG(toConvert chan entities.ImageI
 	wg.Wait()
 }
 
-func (convertSerivce ConvertService) ConvertToText(toConvert chan entities.Annotation,
+func (convertSerivce ConvertService) ConvertToText(annotationToConvert chan entities.Annotation,
 	mainWaitGroup *sync.WaitGroup,
 	annotationType entities.AnnotationType) {
 	defer (*mainWaitGroup).Done()
@@ -37,7 +36,7 @@ func (convertSerivce ConvertService) ConvertToText(toConvert chan entities.Annot
 	if err != nil {
 		panic(err)
 	}
-	for annotation := range toConvert {
+	for annotation := range annotationToConvert {
 		wg.Add(1)
 		go writer.Write(annotation, &wg)
 	}

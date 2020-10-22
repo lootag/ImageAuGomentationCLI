@@ -1,19 +1,20 @@
 package preprocess
 
 import (
+	"sync"
+
 	"github.com/lootag/ImageAuGomentationCLI/annotationReaders"
 	"github.com/lootag/ImageAuGomentationCLI/entities"
-	"sync"
 )
 
 type PreprocessingService struct {
 }
 
 //Implements Preprocessor
-func (preprocessingService PreprocessingService) Preprocess(images *[]string,
-	fileNames *[]string,
-	resized chan entities.ImageInfo,
-	resizedCopy chan entities.ImageInfo,
+func (preprocessingService PreprocessingService) Preprocess(imagePaths []string,
+	imageNames []string,
+	resizedImages chan entities.ImageInfo,
+	resizedImagesCopy chan entities.ImageInfo,
 	resizedAnnotations chan entities.Annotation,
 	resizedAnnotationsCopy chan entities.Annotation,
 	annotationType entities.AnnotationType,
@@ -28,11 +29,11 @@ func (preprocessingService PreprocessingService) Preprocess(images *[]string,
 	annotationsToResize := make(chan entities.Annotation)
 
 	wg.Add(2)
-	go checkAllFilesAreImages(images, fileNames, validatedImages, &wg)
-	go resizeImages(validatedImages, resized, resizedCopy, size, &wg)
+	go checkAllFilesAreImages(imagePaths, imageNames, validatedImages, &wg)
+	go resizeImages(validatedImages, resizedImages, resizedImagesCopy, size, &wg)
 	if annotated {
 		wg.Add(3)
-		go checkAllImagesAreAnnotated(fileNames,
+		go checkAllImagesAreAnnotated(imageNames,
 			&wg,
 			validatedAnnotations)
 		go readAnnotations(annotationType,
@@ -49,42 +50,42 @@ func (preprocessingService PreprocessingService) Preprocess(images *[]string,
 	wg.Wait()
 }
 
-func checkAllFilesAreImages(imagePaths *[]string,
-	fileNames *[]string,
-	checked chan entities.ImageInfo,
+func checkAllFilesAreImages(imagePaths []string,
+	fileNames []string,
+	validatedImages chan entities.ImageInfo,
 	preprocessWaitGroup *sync.WaitGroup) {
 	defer (*preprocessWaitGroup).Done()
 	var wg sync.WaitGroup
-	for imageIndex := 0; imageIndex < len(*imagePaths); imageIndex++ {
+	for imageIndex := 0; imageIndex < len(imagePaths); imageIndex++ {
 		wg.Add(1)
-		go checkAllFilesAreImagesWorker((*imagePaths)[imageIndex],
-			(*fileNames)[imageIndex],
+		go checkAllFilesAreImagesWorker(imagePaths[imageIndex],
+			fileNames[imageIndex],
 			&wg,
-			checked)
+			validatedImages)
 	}
 	wg.Wait()
-	close(checked)
+	close(validatedImages)
 
 }
 
-func checkAllImagesAreAnnotated(fileNames *[]string,
+func checkAllImagesAreAnnotated(fileNames []string,
 	preprocessWaitGroup *sync.WaitGroup,
-	checkedAnnotations chan string) {
+	validatedAnnotations chan string) {
 	defer (*preprocessWaitGroup).Done()
 	var wg sync.WaitGroup
-	for imageIndex := 0; imageIndex < len(*fileNames); imageIndex++ {
+	for imageIndex := 0; imageIndex < len(fileNames); imageIndex++ {
 		wg.Add(1)
-		go checkAllImagesAreAnnotatedWorker((*fileNames)[imageIndex],
+		go checkAllImagesAreAnnotatedWorker(fileNames[imageIndex],
 			&wg,
-			checkedAnnotations)
+			validatedAnnotations)
 	}
 	wg.Wait()
-	close(checkedAnnotations)
+	close(validatedAnnotations)
 
 }
 
 func readAnnotations(annotationType entities.AnnotationType,
-	checkedAnnotations chan string,
+	validatedAnnotations chan string,
 	preprocessWaitGroup *sync.WaitGroup,
 	annotationsToResize chan entities.Annotation) {
 	defer (*preprocessWaitGroup).Done()
@@ -94,7 +95,7 @@ func readAnnotations(annotationType entities.AnnotationType,
 	if err != nil {
 		panic(err)
 	}
-	for annotation := range checkedAnnotations {
+	for annotation := range validatedAnnotations {
 		wg.Add(1)
 		go annotationReader.Read(annotation, annotationsToResize, &wg)
 	}
@@ -122,38 +123,38 @@ func resizeAnnotations(annotationsToResize chan entities.Annotation,
 	close(resizeAnnotationsCopy)
 }
 
-func resizeImages(checked chan entities.ImageInfo,
-	resized chan entities.ImageInfo,
-	resizedCopy chan entities.ImageInfo,
+func resizeImages(validatedImages chan entities.ImageInfo,
+	resizedImages chan entities.ImageInfo,
+	resizedImagesCopy chan entities.ImageInfo,
 	size int,
 	preprocessWaitGroup *sync.WaitGroup) {
 	defer (*preprocessWaitGroup).Done()
 	var wg sync.WaitGroup
-	for image := range checked {
+	for image := range validatedImages {
 		wg.Add(1)
-		go resizeWorker(image, resized, resizedCopy, &wg, size)
+		go resizeImageWorker(image, resizedImages, resizedImages, &wg, size)
 	}
 	wg.Wait()
-	close(resized)
-	close(resizedCopy)
+	close(resizedImages)
+	close(resizedImagesCopy)
 
 }
 
-func intersectStringArrays(stringArray1 []string, stringArray2 []string) []string{
+func intersectStringArrays(stringArray1 []string, stringArray2 []string) []string {
 	intersection := []string{}
-	for stringArrayIndex1 := range stringArray1{
-		if stringArraycontains(stringArray2, stringArray1[stringArrayIndex1]){
+	for stringArrayIndex1 := range stringArray1 {
+		if stringArraycontains(stringArray2, stringArray1[stringArrayIndex1]) {
 			intersection = append(intersection, stringArray1[stringArrayIndex1])
 		}
 	}
-	return intersection;
+	return intersection
 }
 
-func stringArraycontains(stringArray1 []string, toCheck string) bool{
-	for stringIndex := range stringArray1{
-		if stringArray1[stringIndex] == toCheck{
+func stringArraycontains(stringArray1 []string, toCheck string) bool {
+	for stringIndex := range stringArray1 {
+		if stringArray1[stringIndex] == toCheck {
 			return true
 		}
 	}
-	return false;
+	return false
 }

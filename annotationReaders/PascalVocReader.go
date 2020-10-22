@@ -2,23 +2,23 @@ package annotationReaders
 
 import (
 	"encoding/xml"
-	"github.com/lootag/ImageAuGomentationCLI/annotationDtos"
-	"github.com/lootag/ImageAuGomentationCLI/entities"
 	"io/ioutil"
 	"os"
 	"sync"
+
+	"github.com/lootag/ImageAuGomentationCLI/annotationDtos"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
 type PascalVocReader struct {
 }
 
-func (pascalVocReader PascalVocReader) Read(fileName string,
+func (pascalVocReader PascalVocReader) Read(annotationPath string,
 	inputAnnotations chan entities.Annotation,
 	aumentationWaitGroup *sync.WaitGroup) {
 	defer (*aumentationWaitGroup).Done()
 	var xmlAnnotation annotationDtos.PascalVoc
-	fullPath := fileName
-	xmlFile, err := os.Open(fullPath)
+	xmlFile, err := os.Open(annotationPath)
 	if err != nil {
 		panic(err)
 	}
@@ -44,10 +44,9 @@ func (pascalVocReader PascalVocReader) Read(fileName string,
 	inputAnnotations <- annotation
 }
 
-func (pascalVocReader PascalVocReader) ReadSync(fileName string) entities.Annotation{
+func (pascalVocReader PascalVocReader) ReadSync(annotationPath string) entities.Annotation {
 	var xmlAnnotation annotationDtos.PascalVoc
-	fullPath := fileName
-	xmlFile, err := os.Open(fullPath)
+	xmlFile, err := os.Open(annotationPath)
 	if err != nil {
 		panic(err)
 	}

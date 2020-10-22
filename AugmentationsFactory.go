@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+
 	"github.com/lootag/ImageAuGomentationCLI/blur"
 	"github.com/lootag/ImageAuGomentationCLI/rotate"
 )

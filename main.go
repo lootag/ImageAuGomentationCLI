@@ -1,17 +1,18 @@
 package main
 
 import (
-	"fmt"
 	"flag"
-	"github.com/golobby/container"
-	"github.com/lootag/ImageAuGomentationCLI/convert"
-	"github.com/lootag/ImageAuGomentationCLI/entities"
-	"github.com/lootag/ImageAuGomentationCLI/preprocess"
-	"github.com/lootag/ImageAuGomentationCLI/exclusion"
-	"github.com/lootag/ImageAuGomentationCLI/collectGarbage"
-	"github.com/lootag/ImageAuGomentationCLI/scan"
+	"fmt"
 	"os"
 	"sync"
+
+	"github.com/golobby/container"
+	"github.com/lootag/ImageAuGomentationCLI/collectGarbage"
+	"github.com/lootag/ImageAuGomentationCLI/convert"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
+	"github.com/lootag/ImageAuGomentationCLI/exclusion"
+	"github.com/lootag/ImageAuGomentationCLI/preprocess"
+	"github.com/lootag/ImageAuGomentationCLI/scan"
 )
 
 var wg sync.WaitGroup
@@ -21,7 +22,6 @@ func main() {
 		panic("augoment requires at most 6 arguments.")
 	}
 
-	
 	var preprocessor preprocess.Preprocessor
 	var converter convert.Converter
 	var excluder exclusion.Excluder
@@ -40,7 +40,7 @@ func main() {
 	exclusionThresholdPtr := flag.Int("exclusion_threshold", 10, "The minimum number of instances of a class in order for it not to be excluded.")
 	xmlPtr := flag.Bool("annotations", true, "Whether the images are annotated or not")
 	scanPtr := flag.Bool("scan", false, "Whether you want to scan the data")
-	flag.Parse()	
+	flag.Parse()
 
 	var options entities.Options
 	side, err := convertStringToDirection(*rotatePtr)
@@ -56,22 +56,22 @@ func main() {
 		panic(err)
 	}
 	options.BatchSize = *batchPtr
-	options.Side = side
+	options.Direction = side
 	options.Sigma = float64(*sigmaPtr)
-	options.Xml = *xmlPtr
+	options.Annotated = *xmlPtr
 	options.Size = *sizePtr
 	options.ExclusionThreshold = *exclusionThresholdPtr
 	options.InAnnotationType = inAnnotationType
 	options.OutAnnotationType = outAnnotationType
-	options.UserDefinedExclusions = getUserDefinedExclusions(*userDefinedExclusionsPtr);
+	options.UserDefinedExclusions = getUserDefinedExclusions(*userDefinedExclusionsPtr)
 
 	if *scanPtr {
 		scanner.Scan(options.InAnnotationType, *folderPtr)
-		os.Exit(0);
+		os.Exit(0)
 	}
 
 	imagePaths, imageNames := getAllPaths(*folderPtr)
-	classesToExclude := excluder.GetClassesToExclude(options.ExclusionThreshold, options.UserDefinedExclusions, imageNames, options.InAnnotationType);
+	classesToExclude := excluder.GetClassesToExclude(options.ExclusionThreshold, options.UserDefinedExclusions, imageNames, options.InAnnotationType)
 	fmt.Println("All images containing the following classes will be excluded: ")
 	fmt.Println(classesToExclude)
 	batchProcess(&options,
@@ -81,7 +81,7 @@ func main() {
 		&converter,
 		&garbageCollector,
 		classesToExclude)
-	
+
 }
 
 func resolveDependencies(preprocessor *preprocess.Preprocessor,
@@ -101,7 +101,7 @@ func resolveDependencies(preprocessor *preprocess.Preprocessor,
 	container.Transient(func() collectGarbage.GarbageCollector {
 		return &collectGarbage.GarbageCollectionService{}
 	})
-	container.Transient(func() scan.Scanner{
+	container.Transient(func() scan.Scanner {
 		return &scan.ScanningService{}
 	})
 	container.Make(preprocessor)

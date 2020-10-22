@@ -6,15 +6,16 @@ import (
 	"sync"
 )
 
-func checkAllImagesAreAnnotatedWorker(fileName string,
+func checkAllImagesAreAnnotatedWorker(imageName string,
 	preprocessWaitGroup *sync.WaitGroup,
 	checkedAnnotations chan string) {
 	defer (*preprocessWaitGroup).Done()
-	xmlToBeChecked := "./Annotations/" + fileName[:len(fileName)-3] + "xml"
+	xmlToBeChecked := "./Annotations/" + imageName[:len(imageName)-3] + "xml"
 	_, err := os.Stat(xmlToBeChecked)
 	if err == nil {
 		checkedAnnotations <- xmlToBeChecked
-	} else{
-		fmt.Println("The image " + fileName + " is not annotated. Ignoring.")
+	} else {
+		fmt.Println("The image " + imageName + " is not annotated. Ignoring.")
+
 	}
 }

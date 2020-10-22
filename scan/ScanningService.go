@@ -1,92 +1,92 @@
-package scan;
+package scan
 
-import(
+import (
 	"fmt"
-	"sync";
-	"io/ioutil";
-	"github.com/lootag/ImageAuGomentationCLI/entities";
-	"github.com/lootag/ImageAuGomentationCLI/annotationReaders";
-	"strconv";
+	"io/ioutil"
+	"strconv"
+	"sync"
+
+	"github.com/lootag/ImageAuGomentationCLI/annotationReaders"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
-type ScanningService struct{
-	
+type ScanningService struct {
 }
 
 func (scanningService ScanningService) Scan(annotationType entities.AnnotationType,
-	folderToScan string){
-	annotationsToRead := getAnnotationPaths(folderToScan);
-	annotationsToGroup := readAnnotations(annotationType, annotationsToRead);
-	countMap := getCountMap(annotationsToGroup);
+	folderToScan string) {
+	annotationsToRead := getAnnotationPaths(folderToScan)
+	annotationsToGroup := readAnnotations(annotationType, annotationsToRead)
+	countMap := getCountMap(annotationsToGroup)
 	fmt.Println("Here's a scan of your data: ")
 	for key, value := range countMap {
-		fmt.Println(key + ", " + strconv.Itoa(value) + " instances");
+		fmt.Println(key + ", " + strconv.Itoa(value) + " instances")
 	}
 }
 
-func getAnnotationPaths(folderToScan string) []string{
-		annotationsToRead := []string{}
-		root := folderToScan + "/Annotations"
-		fileInfos, err := ioutil.ReadDir(root)
-		if err != nil{
-			panic(err);
-		}
-		for fileInfoIndex := range fileInfos{
-			annotationsToRead = append(annotationsToRead, folderToScan + "/Annotations/" + fileInfos[fileInfoIndex].Name(), );
-		}
-		return annotationsToRead;
+func getAnnotationPaths(folderToScan string) []string {
+	annotationsToRead := []string{}
+	root := folderToScan + "/Annotations"
+	fileInfos, err := ioutil.ReadDir(root)
+	if err != nil {
+		panic(err)
+	}
+	for fileInfoIndex := range fileInfos {
+		annotationsToRead = append(annotationsToRead, folderToScan+"/Annotations/"+fileInfos[fileInfoIndex].Name())
+	}
+	return annotationsToRead
 }
 
 func readAnnotations(annotationType entities.AnnotationType,
 	annotationsToRead []string) []entities.Annotation {
-	annotationsToGroup := []entities.Annotation{};
+	annotationsToGroup := []entities.Annotation{}
 	var factory annotationReaders.AnnotationReadersFactory
 	annotationReader, err := factory.Create(annotationType)
 	if err != nil {
 		panic(err)
 	}
 	for annotationPathIndex := range annotationsToRead {
-		annotation := annotationReader.ReadSync(annotationsToRead[annotationPathIndex]);
-		annotationsToGroup = append(annotationsToGroup, annotation);
+		annotation := annotationReader.ReadSync(annotationsToRead[annotationPathIndex])
+		annotationsToGroup = append(annotationsToGroup, annotation)
 	}
-	return annotationsToGroup;
+	return annotationsToGroup
 }
 
-func getCountMap(annotationsToGroup []entities.Annotation) map[string]int{
-	countMap := make(map[string]int);
-	for annotationIndex := range annotationsToGroup{
-		for classIndex := range annotationsToGroup[annotationIndex].Classes{
-			if contains(getMapKeys(countMap), annotationsToGroup[annotationIndex].Classes[classIndex]){
-				countMap[annotationsToGroup[annotationIndex].Classes[classIndex]] += 1;
+func getCountMap(annotationsToGroup []entities.Annotation) map[string]int {
+	countMap := make(map[string]int)
+	for annotationIndex := range annotationsToGroup {
+		for classIndex := range annotationsToGroup[annotationIndex].Classes {
+			if stringArrayContains(getMapKeys(countMap), annotationsToGroup[annotationIndex].Classes[classIndex]) {
+				countMap[annotationsToGroup[annotationIndex].Classes[classIndex]] += 1
 			} else {
-				countMap[annotationsToGroup[annotationIndex].Classes[classIndex]] = 1;
+				countMap[annotationsToGroup[annotationIndex].Classes[classIndex]] = 1
 			}
 		}
 	}
-	return countMap;
+	return countMap
 }
 
-func addAnnotationPathToChannel(annotationPath string, 
-	annotationsToRead chan string, 
-	getAnnotationPathsWaitGroup *sync.WaitGroup){
-		defer (*getAnnotationPathsWaitGroup).Done()
-		annotationsToRead <- annotationPath;
+func addAnnotationPathToChannel(annotationPath string,
+	annotationsToRead chan string,
+	getAnnotationPathsWaitGroup *sync.WaitGroup) {
+	defer (*getAnnotationPathsWaitGroup).Done()
+	annotationsToRead <- annotationPath
 }
 
-func contains(stringArray1 []string, toCheck string) bool{
-	for stringIndex := range stringArray1{
-		if stringArray1[stringIndex] == toCheck{
+func stringArrayContains(stringArray1 []string, toCheck string) bool {
+	for stringIndex := range stringArray1 {
+		if stringArray1[stringIndex] == toCheck {
 			return true
 		}
 	}
-	return false;
+	return false
 }
 
-func getMapKeys(stringIntMap map[string]int) []string{
+func getMapKeys(stringIntMap map[string]int) []string {
 	keys := []string{}
-	for key, _ := range stringIntMap{
+	for key, _ := range stringIntMap {
 		keys = append(keys, key)
 	}
 
-	return keys;
+	return keys
 }

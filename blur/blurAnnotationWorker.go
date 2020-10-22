@@ -1,8 +1,9 @@
 package blur
 
 import (
-	"github.com/lootag/ImageAuGomentationCLI/entities"
 	"sync"
+
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
 func blurAnnotationWorker(annotationToBlur entities.Annotation,
