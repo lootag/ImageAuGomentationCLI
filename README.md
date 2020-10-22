@@ -45,7 +45,7 @@ It's important to note that at the moment the utility only supports PASCAL_VOC. 
 5) Add the structure to annotationWriters/AnnotationWritersFactory.go;
 6) Now add your command-line argument to converStringToAnnotationType.go.
 
-Now you can use the utility with your custom annotation format by simply specifying the arguments ```-in_annotationtype``` and ```out_annotationtype```.
+Now you can use the utility with your custom annotation format by simply specifying the arguments ```-in_annotationtype``` and ```-out_annotationtype```.
 
 #### 2) Augment your dataset
 The first thing to understand, is that augoment splits up the data into batches, and processes them in parallel. In order to specify a batch size, you need to assign a value to the ```-batch_size``` command-line argument (the default value is 50).  
@@ -61,7 +61,7 @@ These actions are controlled by the  ```-rotate``` and ```-blur``` command-line 
 By setting the ```-exlusion_threshold``` argument, you can exclude from your augmented dataset the images which contain classes whose number of instances is less than a certain threshold. 
 
 
-If you want to manually exclude some classes from the augmented dataset, you can specify the ```-user_defined_exclusions``` argument (Ex. ```user_defined_exclusions="class1;class2;"```).
+If you want to manually exclude some classes from the augmented dataset, you can specify the ```-user_defined_exclusions``` argument (Ex. ```-user_defined_exclusions="class1;class2;"```).
 
 
 By default, the utility will assume that your dataset is annotated, and will therefore augment your annotations too. If you only wish to augment your images, you can simply set ```-annotations=false```.
