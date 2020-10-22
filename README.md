@@ -36,11 +36,11 @@ This will print a list of all the classes in your dataset, with their correspond
 It's important to note that at the moment the utility only supports PASCAL_VOC. However, implementing readers and writers for your own custom format is pretty straightforward.
 1) Add an annotation type in entities/AnnotationType.go;
 2) In the annotationReaders folder, create a structure for your custom reader;
-3) Implement the ```Read``` method for the structure (check PascalVocReader.go for an example);
-4) Implement the ```ReadSync``` method for the structure (check PascalVocReader.go for an example);
+3) Implement the ```Read``` method for the structure (check out PascalVocReader.go for an example);
+4) Implement the ```ReadSync``` method for the structure (check out PascalVocReader.go for an example);
 5) Add the structure to annotationReaders/AnnotationReadersFactory.go;
 6) In the annotationWriters folder, create a structure for your custom writer;
-7) Implement the ```Write``` method for the structure (check PascalVocWriter.go for an example);
+7) Implement the ```Write``` method for the structure (check out PascalVocWriter.go for an example);
 5) Add the structure to annotationWriters/AnnotationWritersFactory.go;
 6) Now add your command-line argument to converStringToAnnotationType.go.
 
