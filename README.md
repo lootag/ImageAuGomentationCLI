@@ -26,8 +26,9 @@ At this point the utility should have been installed successfully. Try out your 
 
 ### Usage
 The augoment command needs to be run in a directory that has two subdirectories:
-1) ```Images```, containing all your images.
-2) ```Annotations```, containing all your annotations .
+1) ```Images```, containing all your images;
+2) ```Annotations```, containing all your annotations.
+
 By default, the command will run in the current directory, that is ```.```. If you wish to run it in a directory other than ```.``` you'll need to specify a value for the ```-folder``` argument. 
 #### 1) Scan your dataset
 The first thing you might want to do is get a picture of your dataset. You can do this running 
