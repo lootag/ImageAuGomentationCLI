@@ -47,7 +47,7 @@ It's important to note that at the moment the utility only supports PASCAL_VOC. 
 Now you can use the utility with your custom annotation format by simply specifying the arguments ```-in_annotationtype``` and ```out_annotationtype```.
 
 #### 2) Augment your dataset
-The first thing to understand, is that augoment processes splits up the data into batches, and processes them in parallel. In order to specify a batch size, you need to assign a value to the ```-batch_size``` command-line argument (the default value is 50).  
+The first thing to understand, is that augoment splits up the data into batches, and processes them in parallel. In order to specify a batch size, you need to assign a value to the ```-batch_size``` command-line argument (the default value is 50).  
 As of right now, the utility will allow you to: 
 1) rotate your images 90 degrees left and right;
 2) rotate your images 180 degrees;
