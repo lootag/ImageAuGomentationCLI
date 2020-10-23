@@ -1,5 +1,5 @@
 # ImageAuGomentationCLI
-ImageAuGomentationCLI is a simple command-line tool that allows users to conveniently analyze and augment annotated and not-annotated images. It's writeen in Go (Golang), and leverages its beautiful concurrency model to speed up computations.
+ImageAuGomentationCLI is a simple command-line tool that allows users to conveniently analyze and augment annotated and not-annotated images. It's written in Go (Golang), and leverages its beautiful concurrency model to speed up computations.
 
 ### Setup
 DISCLAIMER: this utility has only been tested on GNU/Linux and macOS. If you're running Windows, it's strongly recommended that you install Windows Subsystem for Linux.
