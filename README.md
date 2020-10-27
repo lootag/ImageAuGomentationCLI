@@ -4,7 +4,7 @@ ImageAuGomentationCLI is a simple command-line tool that allows users to conveni
 ### Setup
 DISCLAIMER: this utility has only been tested on GNU/Linux and macOS. If you're running Windows, it's strongly recommended that you install Windows Subsystem for Linux.
 Below are the steps to get the CLI.
-#### 1) Get the Go SKD
+#### 1) Get the Go SDK
 On Debian-based systems: 
 ```
 $> sudo apt-get install golang
