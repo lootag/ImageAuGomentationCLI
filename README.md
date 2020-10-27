@@ -19,7 +19,7 @@ Simply go into the folder where you intend to clone the code and run ```$> git c
 #### 3) Build the utility
 Now run ``` $> go build ```. This is going to create a binary called ImageAuGomentationCLI in the folder where you have your code.
 #### 4) Put the utility in your /usr/local/bin folder
-Simply run ``` $> sudo mv ImageAugomentationCLI /usr/local/bin/augoment ```. 
+Simply run ``` $> sudo mv ImageAuGomentationCLI /usr/local/bin/augoment ```. 
 If you don't already have a ```.bashrc``` create it with ```$> touch ~/.bashrc```. 
 Now run ```$> source ~/.bashrc```. 
 At this point the utility should have been installed successfully. Try out your installation by running ```$> augoment -h```. If you get a list with the utility's command-line arguments, the process was successful.
