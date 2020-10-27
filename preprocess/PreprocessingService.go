@@ -148,7 +148,7 @@ func resizeImages(validatedImages chan entities.ImageInfo,
 	var wg sync.WaitGroup
 	for image := range validatedImages {
 		wg.Add(1)
-		go resizeImageWorker(image, resizedImages, resizedImages, &wg, size)
+		go resizeImageWorker(image, resizedImages, resizedImagesCopy, &wg, size)
 	}
 	wg.Wait()
 	close(resizedImages)

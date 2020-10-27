@@ -97,8 +97,8 @@ func batchProcess(options *entities.Options,
 		resizedBlur := resizedRotate
 		resizedBlurAnnotations := resizedRotateAnnotations
 		actions := []string{"rotate", "blur"}
-		rotated := make(chan entities.ImageInfo, (*options).BatchSize)
-		blurred := make(chan entities.ImageInfo, (*options).BatchSize)
+		rotated := make(chan entities.ImageInfo)
+		blurred := make(chan entities.ImageInfo)
 		rotatedAnnotations := make(chan entities.Annotation, (*options).BatchSize)
 		blurredAnnotations := make(chan entities.Annotation, (*options).BatchSize)
 		augmentation, err := AugmentationsFactory(actions[0])
