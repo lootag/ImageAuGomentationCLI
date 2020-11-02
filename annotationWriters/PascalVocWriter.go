@@ -21,6 +21,7 @@ import (
 	"io/ioutil"
 	"os"
 	"sync"
+	"strings"
 
 	"github.com/lootag/ImageAuGomentationCLI/annotationDtos"
 	"github.com/lootag/ImageAuGomentationCLI/entities"
@@ -39,7 +40,7 @@ func (pascalVocWriter PascalVocWriter) Write(annotation entities.Annotation,
 	xmlAnnotation.Objects = []annotationDtos.Object{}
 	for classIndex := 0; classIndex < len(annotation.Classes); classIndex++ {
 		var object annotationDtos.Object
-		object.Name = annotation.Classes[classIndex]
+		object.Name = strings.ToLower(annotation.Classes[classIndex])
 		object.Pose = "Unspecified"
 		object.Truncated = 0
 		object.Difficult = 0
