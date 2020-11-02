@@ -19,6 +19,7 @@ package preprocess
 import (
 	"math"
 	"sync"
+	"regexp"
 
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
@@ -45,8 +46,17 @@ func resizeAnnotationWorker(annotationToResize entities.Annotation,
 		resizedAnnotation.BoundingBoxes[bndBoxIndex].Xmax = xmax
 		resizedAnnotation.BoundingBoxes[bndBoxIndex].Ymax = ymax
 	}
-	resizedAnnotation.NewName = "resized" + annotationToResize.FileName[:len(annotationToResize.FileName)-3] + "xml"
+	resizedAnnotation.NewName = renameAnnotation(annotationToResize.FileName)
 	resizedAnnotations <- resizedAnnotation
 	resizedAnnotationsCopy <- resizedAnnotation
 
+}
+
+func renameAnnotation(annotationName string) string{
+	extensionRegex := regexp.MustCompile(`\.[a-z]+$`);
+	matches := extensionRegex.FindAllString(annotationName, -1);
+	extension := matches[0];
+	numberOfCharactersToDelete := len(extension) -1;
+	newAnnotationName := "resized" + annotationName[:len(annotationName) - numberOfCharactersToDelete] + "xml";
+	return newAnnotationName;
 }

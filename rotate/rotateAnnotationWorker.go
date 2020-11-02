@@ -18,6 +18,7 @@ package rotate
 
 import (
 	"sync"
+	"regexp"
 
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
@@ -35,7 +36,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 		left.Height = annotationToRotate.Width
 		left.Width = annotationToRotate.Height
 		left.FileName = annotationToRotate.FileName
-		left.NewName = "rotateleft" + annotationToRotate.FileName[:len(annotationToRotate.FileName)-3] + "xml"
+		left.NewName = renameAnnotation(annotationToRotate.FileName, "rotateleft")
 		left.Classes = annotationToRotate.Classes
 		rotatedAnnotations <- left
 	} else if direction == entities.RIGHT {
@@ -46,7 +47,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 		right.Height = annotationToRotate.Width
 		right.Width = annotationToRotate.Height
 		right.FileName = annotationToRotate.FileName
-		right.NewName = "rotateright" + annotationToRotate.FileName[:len(annotationToRotate.FileName)-3] + "xml"
+		right.NewName = renameAnnotation(annotationToRotate.FileName, "rotateright")
 		right.Classes = annotationToRotate.Classes
 		rotatedAnnotations <- right
 	} else if direction == entities.FLIP {
@@ -55,7 +56,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 			annotationToRotate.Height,
 			annotationToRotate.Width)
 		flipped.FileName = annotationToRotate.FileName
-		flipped.NewName = "flipped" + annotationToRotate.FileName[:len(annotationToRotate.FileName)-3] + "xml"
+		flipped.NewName = renameAnnotation(annotationToRotate.FileName, "flipped")
 		flipped.Classes = annotationToRotate.Classes
 		rotatedAnnotations <- flipped
 	} else if direction == entities.ALL {
@@ -66,7 +67,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 		left.Height = annotationToRotate.Width
 		left.Width = annotationToRotate.Height
 		left.FileName = annotationToRotate.FileName
-		left.NewName = "rotateleft" + annotationToRotate.FileName[:len(annotationToRotate.FileName)-3] + "xml"
+		left.NewName = renameAnnotation(annotationToRotate.FileName, "rotateleft")
 		left.Classes = annotationToRotate.Classes
 		rotatedAnnotations <- left
 		var right entities.Annotation
@@ -76,7 +77,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 		right.Height = annotationToRotate.Width
 		right.Width = annotationToRotate.Height
 		right.FileName = annotationToRotate.FileName
-		right.NewName = "rotateright" + annotationToRotate.FileName[:len(annotationToRotate.FileName)-3] + "xml"
+		right.NewName = renameAnnotation(annotationToRotate.FileName, "rotateright")
 		right.Classes = annotationToRotate.Classes
 		rotatedAnnotations <- right
 		var flipped entities.Annotation
@@ -84,7 +85,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 			annotationToRotate.Height,
 			annotationToRotate.Width)
 		flipped.FileName = annotationToRotate.FileName
-		flipped.NewName = "flipped" + annotationToRotate.FileName[:len(annotationToRotate.FileName)-3] + "xml"
+		flipped.NewName = renameAnnotation(annotationToRotate.FileName, "flipped")
 		flipped.Classes = annotationToRotate.Classes
 		rotatedAnnotations <- flipped
 	} else {
@@ -160,4 +161,13 @@ func flipAnnotation(boundingBoxesToRotate []entities.BoundingBox,
 		rotatedBoundingBoxes = append(rotatedBoundingBoxes, rotatedBoundingBox)
 	}
 	return rotatedBoundingBoxes
+}
+
+func renameAnnotation(annotationName string, action string) string{
+	extensionRegex := regexp.MustCompile(`\.[a-z]+$`);
+	matches := extensionRegex.FindAllString(annotationName, -1);
+	extension := matches[0];
+	numberOfCharactersToDelete := len(extension) -1;
+	newAnnotationName := action + annotationName[:len(annotationName) - numberOfCharactersToDelete] + "xml";
+	return newAnnotationName;
 }

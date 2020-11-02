@@ -18,6 +18,7 @@ package blur
 
 import (
 	"sync"
+	"regexp"
 
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
@@ -27,7 +28,16 @@ func blurAnnotationWorker(annotationToBlur entities.Annotation,
 	blurWaitGroup *sync.WaitGroup) {
 	defer (*blurWaitGroup).Done()
 	blurredAnnotation := annotationToBlur
-	blurredAnnotation.NewName = "blur" + blurredAnnotation.FileName[:len(blurredAnnotation.FileName)-3] + "xml"
+	blurredAnnotation.NewName = renameAnnotation(blurredAnnotation.FileName)
 	blurredAnnotations <- blurredAnnotation
 
+}
+
+func renameAnnotation(annotationName string) string{
+	extensionRegex := regexp.MustCompile(`\.[a-z]+$`);
+	matches := extensionRegex.FindAllString(annotationName, -1);
+	extension := matches[0];
+	numberOfCharactersToDelete := len(extension) -1;
+	newAnnotationName := "blur" + annotationName[:len(annotationName) - numberOfCharactersToDelete] + "xml";
+	return newAnnotationName;
 }
