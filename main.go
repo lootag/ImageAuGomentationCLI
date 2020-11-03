@@ -88,7 +88,10 @@ func main() {
 	}
 
 	imagePaths, imageNames := getAllPaths(*folderPtr)
-	classesToExclude := excluder.GetClassesToExclude(options.ExclusionThreshold, options.UserDefinedExclusions, imageNames, options.InAnnotationType)
+	classesToExclude := []string{};
+	if options.Annotated {
+		classesToExclude = excluder.GetClassesToExclude(options.ExclusionThreshold, options.UserDefinedExclusions, imageNames, options.InAnnotationType)
+	}
 	fmt.Println("All images containing the following classes will be excluded: ")
 	fmt.Println(classesToExclude)
 	batchProcess(&options,

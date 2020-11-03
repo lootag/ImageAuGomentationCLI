@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"os"
 	"sync"
+	"regexp"
 
 	"github.com/lootag/ImageAuGomentationCLI/annotationDtos"
 	"github.com/lootag/ImageAuGomentationCLI/entities"
@@ -13,6 +14,7 @@ import (
 type PascalVocReader struct {
 }
 
+//In the Read function I replace the "FileName" composing the image's actual name retrieved from fs, because the xml's FileName value could be different file's name
 func (pascalVocReader PascalVocReader) Read(annotationPath string,
 	inputAnnotations chan entities.Annotation,
 	aumentationWaitGroup *sync.WaitGroup) {
@@ -37,7 +39,7 @@ func (pascalVocReader PascalVocReader) Read(annotationPath string,
 		annotation.Classes = append(annotation.Classes, xmlAnnotation.Objects[objectIndex].Name)
 		annotation.BoundingBoxes = append(annotation.BoundingBoxes, boundingBox)
 	}
-	annotation.FileName = xmlAnnotation.FileName
+	annotation.FileName = annotationPath[14:len(annotationPath) - 3] + getImageExtension(xmlAnnotation.FileName);
 	annotation.Width = xmlAnnotation.Size.Width
 	annotation.Height = xmlAnnotation.Size.Height
 	annotation.Depth = xmlAnnotation.Size.Depth
@@ -71,3 +73,15 @@ func (pascalVocReader PascalVocReader) ReadSync(annotationPath string) entities.
 	annotation.Depth = xmlAnnotation.Size.Depth
 	return annotation
 }
+
+func getImageExtension(fileName string) string{
+	extensionRegex := regexp.MustCompile(`\.[a-z]+$`);
+	matches := extensionRegex.FindAllString(fileName, -1);
+	extensionWithDot := matches[0];
+	extension := extensionWithDot[1:len(extensionWithDot)]
+	return extension;
+}
+
+
+
+
