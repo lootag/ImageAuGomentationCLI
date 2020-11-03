@@ -18,8 +18,8 @@ package preprocess
 
 import (
 	"math"
-	"sync"
 	"regexp"
+	"sync"
 
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
@@ -52,11 +52,11 @@ func resizeAnnotationWorker(annotationToResize entities.Annotation,
 
 }
 
-func renameAnnotation(annotationName string) string{
-	extensionRegex := regexp.MustCompile(`\.[a-z]+$`);
-	matches := extensionRegex.FindAllString(annotationName, -1);
-	extension := matches[0];
-	numberOfCharactersToDelete := len(extension) -1;
-	newAnnotationName := "resized" + annotationName[:len(annotationName) - numberOfCharactersToDelete] + "xml";
-	return newAnnotationName;
+func renameAnnotation(annotationName string) string {
+	extensionRegex := regexp.MustCompile(`\.[a-z]+$`)
+	matches := extensionRegex.FindAllString(annotationName, -1)
+	extension := matches[0]
+	numberOfCharactersToDelete := len(extension) - 1
+	newAnnotationName := "resized" + annotationName[:len(annotationName)-numberOfCharactersToDelete] + "xml"
+	return newAnnotationName
 }

@@ -17,8 +17,8 @@ along with ImageAuGomentationCLI.  If not, see <https://www.gnu.org/licenses/>.
 package blur
 
 import (
-	"sync"
 	"regexp"
+	"sync"
 
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
@@ -33,11 +33,11 @@ func blurAnnotationWorker(annotationToBlur entities.Annotation,
 
 }
 
-func renameAnnotation(annotationName string) string{
-	extensionRegex := regexp.MustCompile(`\.[a-z]+$`);
-	matches := extensionRegex.FindAllString(annotationName, -1);
-	extension := matches[0];
-	numberOfCharactersToDelete := len(extension) -1 ;
-	newAnnotationName := "blur" + annotationName[:len(annotationName) - numberOfCharactersToDelete] + "xml";
-	return newAnnotationName;
+func renameAnnotation(annotationName string) string {
+	extensionRegex := regexp.MustCompile(`\.[a-z]+$`)
+	matches := extensionRegex.FindAllString(annotationName, -1)
+	extension := matches[0]
+	numberOfCharactersToDelete := len(extension) - 1
+	newAnnotationName := "blur" + annotationName[:len(annotationName)-numberOfCharactersToDelete] + "xml"
+	return newAnnotationName
 }
