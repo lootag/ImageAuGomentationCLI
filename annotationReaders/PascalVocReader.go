@@ -67,7 +67,7 @@ func (pascalVocReader PascalVocReader) ReadSync(annotationPath string) entities.
 		annotation.Classes = append(annotation.Classes, xmlAnnotation.Objects[objectIndex].Name)
 		annotation.BoundingBoxes = append(annotation.BoundingBoxes, boundingBox)
 	}
-	annotation.FileName = xmlAnnotation.FileName
+	annotation.FileName = annotationPath[14:len(annotationPath) - 3] + getImageExtension(xmlAnnotation.FileName);
 	annotation.Width = xmlAnnotation.Size.Width
 	annotation.Height = xmlAnnotation.Size.Height
 	annotation.Depth = xmlAnnotation.Size.Depth
