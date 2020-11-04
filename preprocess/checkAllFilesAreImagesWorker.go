@@ -21,6 +21,7 @@ import (
 	"image"
 	"os"
 	"sync"
+	"regexp"
 
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
@@ -30,9 +31,7 @@ func checkAllFilesAreImagesWorker(imagePath string,
 	wg *sync.WaitGroup,
 	checked chan entities.ImageInfo) {
 	defer (*wg).Done()
-	lastCharacter := len(imagePath)
-	thirdToLastCharacter := len(imagePath) - 3
-	imageFormat := imagePath[thirdToLastCharacter:lastCharacter]
+	imageFormat := getExtension(imagePath)
 	imageFile, err := os.Open(imagePath)
 	if err != nil {
 		panic("There was a problem opening the file " + imagePath)
@@ -48,10 +47,18 @@ func checkAllFilesAreImagesWorker(imagePath string,
 	imageInfo.OriginalFileName = imageName
 	imageInfo.ImageSource = decodedImage
 
-	if imageFormat == "jpg" || imageFormat == "png" {
+	if imageFormat == "jpg" || imageFormat =="jpeg" || imageFormat == "png"  {
 		checked <- imageInfo
 	} else {
 		fmt.Println("The file " + imagePath + " is not an image, or its format is not supported. Ignoring.")
 	}
 
+}
+
+func getExtension(imagePath string) string{
+	extensionRegex := regexp.MustCompile(`\.[a-z]+$`);
+	matches := extensionRegex.FindAllString(imagePath, -1);
+	extensionWithDot := matches[0];
+	extension := extensionWithDot[1:len(extensionWithDot)];
+	return extension;
 }

@@ -21,6 +21,7 @@ import (
 	"image/jpeg"
 	"os"
 	"sync"
+	"regexp"
 
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
@@ -28,7 +29,7 @@ import (
 func convertToJPGWorker(imageToConvert entities.ImageInfo,
 	wg *sync.WaitGroup) {
 	defer (*wg).Done()
-	outputFile, err := os.Create("./AugmentedImages/" + imageToConvert.NewName)
+	outputFile, err := os.Create("./AugmentedImages/" + normalizeFileExtension(imageToConvert.NewName))
 	if err != nil {
 		panic(err)
 	}
@@ -38,4 +39,13 @@ func convertToJPGWorker(imageToConvert entities.ImageInfo,
 		panic(err)
 	}
 
+}
+
+func normalizeFileExtension(fileName string) string{
+	extensionRegex := regexp.MustCompile(`\.[a-z]+$`)
+	matches := extensionRegex.FindAllString(fileName, -1);
+	extension := matches[0];
+	numberOfCharactersToDelete := len(extension) -1;
+	normalizedFile := fileName[0:len(fileName) - numberOfCharactersToDelete] + "jpg";
+	return normalizedFile;
 }
