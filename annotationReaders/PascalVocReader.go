@@ -1,6 +1,7 @@
 package annotationReaders
 
 import (
+	"fmt"
 	"encoding/xml"
 	"io/ioutil"
 	"os"
@@ -75,7 +76,7 @@ func (pascalVocReader PascalVocReader) ReadSync(annotationPath string) entities.
 }
 
 func getImageExtension(fileName string) string {
-	extensionRegex := regexp.MustCompile(`\.[a-z]+$`)
+	extensionRegex := regexp.MustCompile(`\.[a-zA-Z]+$`)
 	matches := extensionRegex.FindAllString(fileName, -1)
 	extensionWithDot := matches[0]
 	extension := extensionWithDot[1:len(extensionWithDot)]
