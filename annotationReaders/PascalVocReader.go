@@ -1,7 +1,6 @@
 package annotationReaders
 
 import (
-	"fmt"
 	"encoding/xml"
 	"io/ioutil"
 	"os"
