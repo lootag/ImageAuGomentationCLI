@@ -76,6 +76,7 @@ func (pascalVocReader PascalVocReader) ReadSync(annotationPath string) entities.
 }
 
 func getImageExtension(fileName string) string {
+	fmt.Println("retrieving extension from " + fileName)
 	extensionRegex := regexp.MustCompile(`\.[a-zA-Z]+$`)
 	matches := extensionRegex.FindAllString(fileName, -1)
 	extensionWithDot := matches[0]
