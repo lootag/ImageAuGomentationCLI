@@ -35,8 +35,8 @@ import (
 var wg sync.WaitGroup
 
 func main() {
-	if len(os.Args) > 7 {
-		panic("augoment requires at most 6 arguments.")
+	if len(os.Args) > 12 {
+		panic("augoment requires at most 11 arguments.")
 	}
 
 	var preprocessor preprocess.Preprocessor
