@@ -21,17 +21,16 @@ import (
 	"image"
 	"os"
 	"sync"
-	"regexp"
 
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
-func checkAllFilesAreImagesWorker(imagePath string,
+func(this PreprocessingService) checkAllFilesAreImagesWorker(imagePath string,
 	imageName string,
 	wg *sync.WaitGroup,
 	checked chan entities.ImageInfo) {
 	defer (*wg).Done()
-	imageFormat := getExtension(imagePath)
+	imageFormat := this.getExtension(imagePath)
 	imageFile, err := os.Open(imagePath)
 	if err != nil {
 		panic("There was a problem opening the file " + imagePath)
@@ -46,8 +45,9 @@ func checkAllFilesAreImagesWorker(imagePath string,
 	var imageInfo entities.ImageInfo
 	imageInfo.OriginalFileName = imageName
 	imageInfo.ImageSource = decodedImage
+	acceptedFormats := []string{"jpg", "jpeg", "png"}
 
-	if imageFormat == "jpg" || imageFormat =="jpeg" || imageFormat == "png"  {
+	if this.stringArrayContains(acceptedFormats, imageFormat)  {
 		checked <- imageInfo
 	} else {
 		fmt.Println("The file " + imagePath + " is not an image, or its format is not supported. Ignoring.")
@@ -55,10 +55,4 @@ func checkAllFilesAreImagesWorker(imagePath string,
 
 }
 
-func getExtension(imagePath string) string{
-	extensionRegex := regexp.MustCompile(`\.[a-z]+$`);
-	matches := extensionRegex.FindAllString(imagePath, -1);
-	extensionWithDot := matches[0];
-	extension := extensionWithDot[1:len(extensionWithDot)];
-	return extension;
-}
+

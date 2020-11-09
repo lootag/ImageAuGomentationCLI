@@ -22,7 +22,7 @@ import (
 	"sync"
 )
 
-func checkAllImagesAreAnnotatedWorker(imageName string,
+func(this PreprocessingService) checkAllImagesAreAnnotatedWorker(imageName string,
 	folder string,
 	preprocessWaitGroup *sync.WaitGroup,
 	validatedAnnotations chan string) {

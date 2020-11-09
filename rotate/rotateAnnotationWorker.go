@@ -29,6 +29,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 	rotateWaitGroup *sync.WaitGroup) {
 	defer (*rotateWaitGroup).Done()
 	if direction == entities.LEFT {
+		//TODO: All of this needs to be put in a method
 		var left entities.Annotation
 		left.BoundingBoxes = rotateAnnotationLeft(annotationToRotate.BoundingBoxes,
 			annotationToRotate.Height,
@@ -42,6 +43,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 		rotatedAnnotations <- left
 	} else if direction == entities.RIGHT {
 		var right entities.Annotation
+		//TODO: All of this needs to be put in a method
 		right.BoundingBoxes = rotateAnnotationRight(annotationToRotate.BoundingBoxes,
 			annotationToRotate.Height,
 			annotationToRotate.Width)
@@ -54,6 +56,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 		rotatedAnnotations <- right
 	} else if direction == entities.FLIP {
 		var flipped entities.Annotation
+		//TODO: All of this needs to be put in a method
 		flipped.BoundingBoxes = flipAnnotation(annotationToRotate.BoundingBoxes,
 			annotationToRotate.Height,
 			annotationToRotate.Width)
@@ -66,6 +69,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 		rotatedAnnotations <- flipped
 	} else if direction == entities.ALL {
 		var left entities.Annotation
+		//TODO: Call the methods you've made to refactor the code above
 		left.BoundingBoxes = rotateAnnotationLeft(annotationToRotate.BoundingBoxes,
 			annotationToRotate.Height,
 			annotationToRotate.Width)

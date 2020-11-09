@@ -27,4 +27,5 @@ type Options struct {
 	OutAnnotationType     AnnotationType
 	ExclusionThreshold    int
 	UserDefinedExclusions []string
+	Scan 				  bool
 }
