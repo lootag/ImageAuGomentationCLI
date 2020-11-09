@@ -1,7 +1,6 @@
 package annotationReaders
 
 import (
-	"fmt"
 	"encoding/xml"
 	"io/ioutil"
 	"os"
@@ -80,7 +79,6 @@ func (pascalVocReader PascalVocReader) ReadSync(annotationPath string) entities.
 
 func eliminateFolderFromFileName(annotationPath string) string{
 	_, file := path.Split(annotationPath)
-	fmt.Println(file)
 	return file
 }
 

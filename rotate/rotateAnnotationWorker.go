@@ -35,6 +35,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 			annotationToRotate.Width)
 		left.Height = annotationToRotate.Width
 		left.Width = annotationToRotate.Height
+		left.Depth = annotationToRotate.Depth
 		left.FileName = annotationToRotate.FileName
 		left.NewName = renameAnnotation(annotationToRotate.FileName, "rotateleft")
 		left.Classes = annotationToRotate.Classes
@@ -46,6 +47,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 			annotationToRotate.Width)
 		right.Height = annotationToRotate.Width
 		right.Width = annotationToRotate.Height
+		right.Depth = annotationToRotate.Depth
 		right.FileName = annotationToRotate.FileName
 		right.NewName = renameAnnotation(annotationToRotate.FileName, "rotateright")
 		right.Classes = annotationToRotate.Classes
@@ -57,6 +59,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 			annotationToRotate.Width)
 		flipped.Height = annotationToRotate.Height
 		flipped.Width = annotationToRotate.Width
+		flipped.Depth = annotationToRotate.Depth
 		flipped.FileName = annotationToRotate.FileName
 		flipped.NewName = renameAnnotation(annotationToRotate.FileName, "flipped")
 		flipped.Classes = annotationToRotate.Classes
@@ -68,6 +71,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 			annotationToRotate.Width)
 		left.Height = annotationToRotate.Width
 		left.Width = annotationToRotate.Height
+		left.Depth = annotationToRotate.Depth
 		left.FileName = annotationToRotate.FileName
 		left.NewName = renameAnnotation(annotationToRotate.FileName, "rotateleft")
 		left.Classes = annotationToRotate.Classes
@@ -78,6 +82,7 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 			annotationToRotate.Width)
 		right.Height = annotationToRotate.Width
 		right.Width = annotationToRotate.Height
+		right.Depth = annotationToRotate.Depth
 		right.FileName = annotationToRotate.FileName
 		right.NewName = renameAnnotation(annotationToRotate.FileName, "rotateright")
 		right.Classes = annotationToRotate.Classes
@@ -86,6 +91,9 @@ func rotateAnnotationWorker(annotationToRotate entities.Annotation,
 		flipped.BoundingBoxes = flipAnnotation(annotationToRotate.BoundingBoxes,
 			annotationToRotate.Height,
 			annotationToRotate.Width)
+		flipped.Height = annotationToRotate.Height
+		flipped.Width = annotationToRotate.Width
+		flipped.Depth = annotationToRotate.Depth
 		flipped.FileName = annotationToRotate.FileName
 		flipped.NewName = renameAnnotation(annotationToRotate.FileName, "flipped")
 		flipped.Classes = annotationToRotate.Classes
