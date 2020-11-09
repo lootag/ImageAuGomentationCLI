@@ -24,5 +24,6 @@ type Excluder interface {
 	GetClassesToExclude(exclusionThreshold int,
 		userDefinedExclusions []string,
 		imageNames []string,
+		folder string,
 		annotationType entities.AnnotationType) []string
 }

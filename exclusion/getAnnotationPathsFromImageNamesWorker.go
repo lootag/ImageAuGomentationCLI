@@ -21,9 +21,10 @@ import (
 )
 
 func getAnnotationPathsFromImageNamesWorker(imageName string,
+	folder string,
 	annotationPaths chan string,
 	preprocessWaitGroup *sync.WaitGroup) {
 	defer (*preprocessWaitGroup).Done()
-	annotationPath := "./Annotations/" + imageName[:len(imageName)-3] + "xml"
+	annotationPath := folder + "/Annotations/" + imageName[:len(imageName)-3] + "xml"
 	annotationPaths <- annotationPath
 }

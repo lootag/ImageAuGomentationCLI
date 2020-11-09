@@ -30,6 +30,7 @@ type Preprocessor interface {
 		resizedAnnotations chan entities.Annotation,
 		resizedAnnotationsCopy chan entities.Annotation,
 		annotationType entities.AnnotationType,
+		folder string,
 		size int,
 		annotated bool,
 		classesToExclude []string,

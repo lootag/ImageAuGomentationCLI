@@ -72,6 +72,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	options.Folder = *folderPtr
 	options.BatchSize = *batchPtr
 	options.Direction = side
 	options.Sigma = float64(*sigmaPtr)
@@ -83,14 +84,18 @@ func main() {
 	options.UserDefinedExclusions = getUserDefinedExclusions(*userDefinedExclusionsPtr)
 
 	if *scanPtr {
-		scanner.Scan(options.InAnnotationType, *folderPtr)
+		scanner.Scan(options.InAnnotationType, options.Folder)
 		os.Exit(0)
 	}
 
 	imagePaths, imageNames := getAllPaths(*folderPtr)
 	classesToExclude := []string{};
 	if options.Annotated {
-		classesToExclude = excluder.GetClassesToExclude(options.ExclusionThreshold, options.UserDefinedExclusions, imageNames, options.InAnnotationType)
+		classesToExclude = excluder.GetClassesToExclude(options.ExclusionThreshold, 
+														options.UserDefinedExclusions, 
+														imageNames, 
+														options.Folder, 
+														options.InAnnotationType)
 	}
 	fmt.Println("All images containing the following classes will be excluded: ")
 	fmt.Println(classesToExclude)

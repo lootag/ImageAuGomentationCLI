@@ -1,11 +1,13 @@
 package annotationReaders
 
 import (
+	"fmt"
 	"encoding/xml"
 	"io/ioutil"
 	"os"
 	"regexp"
 	"sync"
+	"path"
 
 	"github.com/lootag/ImageAuGomentationCLI/annotationDtos"
 	"github.com/lootag/ImageAuGomentationCLI/entities"
@@ -39,7 +41,8 @@ func (pascalVocReader PascalVocReader) Read(annotationPath string,
 		annotation.Classes = append(annotation.Classes, xmlAnnotation.Objects[objectIndex].Name)
 		annotation.BoundingBoxes = append(annotation.BoundingBoxes, boundingBox)
 	}
-	annotation.FileName = annotationPath[14:len(annotationPath)-3] + getImageExtension(xmlAnnotation.FileName)
+	annotationName := eliminateFolderFromFileName(annotationPath)
+	annotation.FileName = annotationName[:len(annotationName)-3] + getImageExtension(xmlAnnotation.FileName)
 	annotation.Width = xmlAnnotation.Size.Width
 	annotation.Height = xmlAnnotation.Size.Height
 	annotation.Depth = xmlAnnotation.Size.Depth
@@ -67,11 +70,18 @@ func (pascalVocReader PascalVocReader) ReadSync(annotationPath string) entities.
 		annotation.Classes = append(annotation.Classes, xmlAnnotation.Objects[objectIndex].Name)
 		annotation.BoundingBoxes = append(annotation.BoundingBoxes, boundingBox)
 	}
-	annotation.FileName = annotationPath[14:len(annotationPath)-3] + getImageExtension(xmlAnnotation.FileName)
+	annotationName := eliminateFolderFromFileName(annotationPath)
+	annotation.FileName = annotationName[:len(annotationName)-3] + getImageExtension(xmlAnnotation.FileName)
 	annotation.Width = xmlAnnotation.Size.Width
 	annotation.Height = xmlAnnotation.Size.Height
 	annotation.Depth = xmlAnnotation.Size.Depth
 	return annotation
+}
+
+func eliminateFolderFromFileName(annotationPath string) string{
+	_, file := path.Split(annotationPath)
+	fmt.Println(file)
+	return file
 }
 
 func getImageExtension(fileName string) string {

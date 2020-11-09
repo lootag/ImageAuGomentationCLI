@@ -29,12 +29,13 @@ type ExclusionService struct {
 func (exclusionService ExclusionService) GetClassesToExclude(exclusionThreshold int,
 	userDefinedExclusions []string,
 	imageNames []string,
+	folder string,
 	annotationType entities.AnnotationType) []string {
 	var wg sync.WaitGroup
 	annotationPaths := make(chan string, len(imageNames))
 	annotationsToGroup := make(chan entities.Annotation, len(imageNames))
 	wg.Add(2)
-	go getAnnotationPathsFromImageNames(imageNames, annotationPaths, &wg)
+	go getAnnotationPathsFromImageNames(imageNames, folder, annotationPaths, &wg)
 	go readAnnotations(annotationType, &wg, annotationPaths, annotationsToGroup)
 	wg.Wait()
 	countMap := getCountMap(annotationsToGroup)
@@ -48,13 +49,14 @@ func (exclusionService ExclusionService) GetClassesToExclude(exclusionThreshold 
 }
 
 func getAnnotationPathsFromImageNames(imageNames []string,
+	folder string,
 	annotationPaths chan string,
 	excludeWaitGroup *sync.WaitGroup) {
 	defer (*excludeWaitGroup).Done()
 	var wg sync.WaitGroup
 	for imageNameIndex := range imageNames {
 		wg.Add(1)
-		go getAnnotationPathsFromImageNamesWorker(imageNames[imageNameIndex], annotationPaths, &wg)
+		go getAnnotationPathsFromImageNamesWorker(imageNames[imageNameIndex], folder, annotationPaths, &wg)
 	}
 	wg.Wait()
 	close(annotationPaths)

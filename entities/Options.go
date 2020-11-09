@@ -17,6 +17,7 @@ along with ImageAuGomentationCLI.  If not, see <https://www.gnu.org/licenses/>.
 package entities
 
 type Options struct {
+	Folder 				  string
 	Size                  int
 	Direction             Direction
 	Sigma                 float64

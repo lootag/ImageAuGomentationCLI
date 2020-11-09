@@ -34,6 +34,7 @@ func (preprocessingService PreprocessingService) Preprocess(imagePaths []string,
 	resizedAnnotations chan entities.Annotation,
 	resizedAnnotationsCopy chan entities.Annotation,
 	annotationType entities.AnnotationType,
+	folder string,
 	size int,
 	annotated bool,
 	classesToExclude []string,
@@ -50,6 +51,7 @@ func (preprocessingService PreprocessingService) Preprocess(imagePaths []string,
 	if annotated {
 		wg.Add(3)
 		go checkAllImagesAreAnnotated(imageNames,
+			folder,
 			&wg,
 			validatedAnnotations)
 		go readAnnotations(annotationType,
@@ -85,6 +87,7 @@ func checkAllFilesAreImages(imagePaths []string,
 }
 
 func checkAllImagesAreAnnotated(fileNames []string,
+	folder string,
 	preprocessWaitGroup *sync.WaitGroup,
 	validatedAnnotations chan string) {
 	defer (*preprocessWaitGroup).Done()
@@ -92,6 +95,7 @@ func checkAllImagesAreAnnotated(fileNames []string,
 	for imageIndex := 0; imageIndex < len(fileNames); imageIndex++ {
 		wg.Add(1)
 		go checkAllImagesAreAnnotatedWorker(fileNames[imageIndex],
+			folder,
 			&wg,
 			validatedAnnotations)
 	}
