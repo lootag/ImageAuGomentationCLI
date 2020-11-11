@@ -1,0 +1,26 @@
+<annotation>
+	<folder>image_adidas_ig</folder>
+	<filename>102710807_690875948361966_8203001685293396754_n.jpg</filename>
+	<path>C:\Users\giova\Desktop\VSI\adidas_ig\image_adidas_ig\102710807_690875948361966_8203001685293396754_n.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1080</width>
+		<height>1079</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>adids_1</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>487</xmin>
+			<ymin>147</ymin>
+			<xmax>536</xmax>
+			<ymax>202</ymax>
+		</bndbox>
+	</object>
+</annotation>
