@@ -3,9 +3,8 @@ all: build_test test build install
 build_test:
 	go build -o tests/bin/augoment
 test:
-	go test ./tests
+	go test -v -cover -race ./...
 build:
-	go build -o ../bin/augoment
+	go build -o /usr/local/bin/augoment
 install:
-	sudo mv ../bin/augoment /usr/local/bin
-	source ~/.bashrc
+	go install
