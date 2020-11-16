@@ -14,10 +14,45 @@ On macOs:
 $> brew install go
 ```
 If you're running some other GNU/Linux distribution check out https://golang.org/doc/install.
-#### 2) Clone this repository
-Simply go into the folder where you intend to clone the code and run ```$> git clone https://github.com/lootag/ImageAuGomentationCLI.git ```. 
+#### 2) Clone this repository and setup environment vars
+Enter the folder where you intend to clone the code and run 
+```sh
+$> git clone https://github.com/lootag/ImageAuGomentationCLI.git 
+```
+
+Then:
+```sh
+$> export GOPATH=${HOME}/go
+$> export GOBIN=${GOPATH}bin
+$> export PATH=${PATH}:${GOBIN}
+$> go env
+[...]
+```
+
 #### 3) Make the utility
-Now just run make.
+Prepare test environment:
+```sh
+$> make build_test
+```
+
+Run test:
+```sh
+$> make test
+```
+
+### 4) Install
+
+Option 1: Install augoment in /usr/local/bin. 
+Fix _build_ target in Makefile, in order to set your preferred location based on your $PATH env
+```sh
+$> make build
+```
+
+Option 2: Install augoment in $GOBIN
+```sh
+$> make install
+```
+
 At this point the utility should have been installed successfully. Try out your installation by running ```$> augoment -h```. If you get a list with the utility's command-line arguments, the process was successful.
 
 ### Usage
