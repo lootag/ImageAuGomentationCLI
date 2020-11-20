@@ -6,5 +6,6 @@ test:
 	go test -v -cover -race ./...
 build:
 	go build -o /usr/local/bin/augoment
+	source ~/.bashrc
 install:
 	go install

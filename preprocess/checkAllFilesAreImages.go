@@ -17,8 +17,7 @@ along with ImageAuGomentationCLI.  If not, see <https://www.gnu.org/licenses/>.
 package preprocess
 
 import (
-	"sync"
-	
+	"sync"	
 	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
