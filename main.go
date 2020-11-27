@@ -54,11 +54,11 @@ func main() {
 	imagePaths, imageNames := commons.GetAllImagePathsAndNames(options.Folder)
 	classesToExclude := []string{};
 	if options.Annotated {
-		classesToExclude = excluder.GetClassesToExclude(options.ExclusionThreshold, 
-														options.UserDefinedExclusions, 
-														imageNames, 
-														options.Folder, 
-														options.InAnnotationType)
+		classesToExclude = excluder.GetClassesToExclude(options.ExclusionThreshold,
+						                options.UserDefinedExclusions,
+								imageNames,
+								options.Folder,
+								options.InAnnotationType)
 	}
 	fmt.Println("All images containing the following classes will be excluded: ")
 	fmt.Println(classesToExclude)

@@ -14,19 +14,15 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ImageAuGomentationCLI.  If not, see <https://www.gnu.org/licenses/>.
 */
-package exclusion
 
-import (
-	"sync"
-        "github.com/lootag/ImageAuGomentationCLI/commons"
-)
 
-func(this ExclusionService) getAnnotationPathsFromImageNamesWorker(imageName string,
-	folder string,
-	annotationPaths chan string,
-	preprocessWaitGroup *sync.WaitGroup) {
-	defer (*preprocessWaitGroup).Done()
-        fileExtension := commons.GetFileExtension(imageName)
-	annotationPath := folder + "/Annotations/" + imageName[:len(imageName)-len(fileExtension)] + "xml"
-	annotationPaths <- annotationPath
+package entities
+
+type AugmentationRequest struct{
+   ImagesToAugemnt []ImageInfo
+   AnnotationsToAuGoment []Annotation
+   Options Options
+
 }
+
+

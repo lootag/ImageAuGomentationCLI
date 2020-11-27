@@ -7,6 +7,6 @@ import (
 )
 
 type AnnotationReader interface {
-	Read(annotationPath string, inputAnnotations chan entities.Annotation, wg *sync.WaitGroup)
+	Read(annotationPath string, inputAnnotations chan entities.Annotation, wg *sync.WaitGroup) //Async
 	ReadSync(annotationPath string) entities.Annotation
 }
