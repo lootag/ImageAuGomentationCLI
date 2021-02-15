@@ -21,4 +21,5 @@ type AnnotationType int
 const (
 	PASCAL_VOC     AnnotationType = 0
 	NIL_ANNOTATION AnnotationType = 1
+	GOOGLE         AnnotationType = 2
 )

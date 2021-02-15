@@ -19,15 +19,15 @@ package main
 
 import (
 	"fmt"
-	"os"
-	"sync"
-	"github.com/lootag/ImageAuGomentationCLI/commons"
-	"github.com/lootag/ImageAuGomentationCLI/orchestration"
 	"github.com/lootag/ImageAuGomentationCLI/collectGarbage"
+	"github.com/lootag/ImageAuGomentationCLI/commons"
 	"github.com/lootag/ImageAuGomentationCLI/convert"
 	"github.com/lootag/ImageAuGomentationCLI/exclusion"
+	"github.com/lootag/ImageAuGomentationCLI/orchestration"
 	"github.com/lootag/ImageAuGomentationCLI/preprocess"
 	"github.com/lootag/ImageAuGomentationCLI/scan"
+	"os"
+	"sync"
 )
 
 var wg sync.WaitGroup
@@ -52,13 +52,13 @@ func main() {
 	}
 
 	imagePaths, imageNames := commons.GetAllImagePathsAndNames(options.Folder)
-	classesToExclude := []string{};
+	classesToExclude := []string{}
 	if options.Annotated {
 		classesToExclude = excluder.GetClassesToExclude(options.ExclusionThreshold,
-						                options.UserDefinedExclusions,
-								imageNames,
-								options.Folder,
-								options.InAnnotationType)
+			options.UserDefinedExclusions,
+			imageNames,
+			options.Folder,
+			options.InAnnotationType)
 	}
 	fmt.Println("All images containing the following classes will be excluded: ")
 	fmt.Println(classesToExclude)
@@ -71,4 +71,3 @@ func main() {
 		classesToExclude)
 
 }
-

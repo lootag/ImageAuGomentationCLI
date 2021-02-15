@@ -1,0 +1,26 @@
+<annotation>
+	<folder>./AugmentedAnnotations</folder>
+	<filename>102650641_542096483341539_8277500341994538365_n.jpg</filename>
+	<path></path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>464</width>
+		<height>464</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>adidas_text</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>292</xmin>
+			<ymin>212</ymin>
+			<xmax>329</xmax>
+			<ymax>256</ymax>
+		</bndbox>
+	</object>
+</annotation>

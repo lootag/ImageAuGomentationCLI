@@ -14,17 +14,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ImageAuGomentationCLI.  If not, see <https://www.gnu.org/licenses/>.
 */
-package convert
+package exclusion
 
 import (
-	"regexp"
+	"github.com/lootag/ImageAuGomentationCLI/commons"
+	"github.com/lootag/ImageAuGomentationCLI/entities"
 )
 
-func(this ConvertService) normalizeFileExtension(fileName string) string{
-	extensionRegex := regexp.MustCompile(`\.[a-z]+$`)
-	matches := extensionRegex.FindAllString(fileName, -1);
-	extensionWithDot := matches[0];
-	numberOfCharactersToDelete := len(extensionWithDot) -1;
-	normalizedFile := fileName[0:len(fileName) - numberOfCharactersToDelete] + "jpg";
-	return normalizedFile;
+func (this ExclusionService) getCountMap(annotationsToGroup chan entities.Annotation) map[string]int {
+	countMap := make(map[string]int)
+	for annotation := range annotationsToGroup {
+		for _, class := range annotation.Classes {
+			if commons.StringArrayContains(this.getMapKeys(countMap), class) {
+				countMap[class] += 1
+			} else {
+				countMap[class] = 1
+			}
+		}
+	}
+	return countMap
 }

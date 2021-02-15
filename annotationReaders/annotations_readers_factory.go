@@ -13,6 +13,8 @@ func (annotationReadersFactory AnnotationReadersFactory) Create(annotationType e
 
 	if annotationType == entities.PASCAL_VOC {
 		return PascalVocReader{}, nil
+	} else if annotationType == entities.GOOGLE {
+		return GoogleReader{}, nil
 	}
 
 	return nil, errors.New("The annotation type you've specified is not supported. Exiting.")

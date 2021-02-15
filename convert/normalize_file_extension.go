@@ -14,14 +14,17 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ImageAuGomentationCLI.  If not, see <https://www.gnu.org/licenses/>.
 */
-package commons
+package convert
 
+import (
+	"regexp"
+)
 
-func StringArrayContains(stringArray1 []string, toCheck string) bool {
-	for stringIndex := range stringArray1 {
-		if stringArray1[stringIndex] == toCheck {
-			return true
-		}
-	}
-	return false
+func (this ConvertService) normalizeFileExtension(fileName string) string {
+	extensionRegex := regexp.MustCompile(`\.[a-z]+$`)
+	matches := extensionRegex.FindAllString(fileName, -1)
+	extensionWithDot := matches[0]
+	numberOfCharactersToDelete := len(extensionWithDot) - 1
+	normalizedFileName := fileName[0:len(fileName)-numberOfCharactersToDelete] + "jpg"
+	return normalizedFileName
 }

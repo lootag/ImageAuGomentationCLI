@@ -14,23 +14,13 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with ImageAuGomentationCLI.  If not, see <https://www.gnu.org/licenses/>.
 */
-package exclusion
+package commons
 
-import (
-	"github.com/lootag/ImageAuGomentationCLI/commons"
-	"github.com/lootag/ImageAuGomentationCLI/entities"
-)
-
-func(this ExclusionService) getCountMap(annotationsToGroup chan entities.Annotation) map[string]int {
-	countMap := make(map[string]int)
-	for annotation := range annotationsToGroup {
-		for classIndex := range annotation.Classes {
-			if commons.StringArrayContains(this.getMapKeys(countMap), annotation.Classes[classIndex]) {
-				countMap[annotation.Classes[classIndex]] += 1
-			} else {
-				countMap[annotation.Classes[classIndex]] = 1
-			}
+func StringArrayContains(stringArray []string, toCheck string) bool {
+	for stringIndex := range stringArray {
+		if stringArray[stringIndex] == toCheck {
+			return true
 		}
 	}
-	return countMap
+	return false
 }

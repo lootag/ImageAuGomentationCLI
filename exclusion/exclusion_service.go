@@ -40,12 +40,10 @@ func (this ExclusionService) GetClassesToExclude(exclusionThreshold int,
 	wg.Wait()
 	countMap := this.getCountMap(annotationsToGroup)
 	classesToExclude := this.excludeClassesWithCountBelowThreshold(exclusionThreshold, countMap)
-	for userDefinedIndex := range userDefinedExclusions {
-		if !commons.StringArrayContains(classesToExclude, userDefinedExclusions[userDefinedIndex]) {
-			classesToExclude = append(classesToExclude, userDefinedExclusions[userDefinedIndex])
+	for _, userDefinedExclusion := range userDefinedExclusions {
+		if !commons.StringArrayContains(classesToExclude, userDefinedExclusion) {
+			classesToExclude = append(classesToExclude, userDefinedExclusion)
 		}
 	}
 	return classesToExclude
 }
-
-
