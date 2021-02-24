@@ -18,9 +18,7 @@ along with ImageAuGomentationCLI.  If not, see <https://www.gnu.org/licenses/>.
 package main
 
 import (
-	"fmt"
 	"github.com/lootag/ImageAuGomentationCLI/collectGarbage"
-	"github.com/lootag/ImageAuGomentationCLI/commons"
 	"github.com/lootag/ImageAuGomentationCLI/convert"
 	"github.com/lootag/ImageAuGomentationCLI/exclusion"
 	"github.com/lootag/ImageAuGomentationCLI/orchestration"
@@ -33,41 +31,26 @@ import (
 var wg sync.WaitGroup
 
 func main() {
-	numberOfCLIArguments := 12
-	if len(os.Args) > numberOfCLIArguments {
-		panic("augoment requires at most 11 arguments.")
-	}
-
+	validateNumberOfCLIArguments()
+	//These are all the services which the application needs
 	var preprocessor preprocess.Preprocessor
 	var converter convert.Converter
 	var excluder exclusion.Excluder
 	var garbageCollector collectGarbage.GarbageCollector
 	var scanner scan.Scanner
+
+	//Here the dependencies are resolved
 	orchestration.ResolveDependencies(&preprocessor, &converter, &excluder, &garbageCollector, &scanner)
 	options := orchestration.GetCommandLineOptions()
 
-	if options.Scan {
-		scanner.Scan(options.InAnnotationType, options.Folder)
-		os.Exit(0)
-	}
+	//The dependencies are injected in the application class
+	app := orchestration.Application{&preprocessor, &converter, &excluder, &garbageCollector, &scanner}
+	app.Run(options)
+}
 
-	imagePaths, imageNames := commons.GetAllImagePathsAndNames(options.Folder)
-	classesToExclude := []string{}
-	if options.Annotated {
-		classesToExclude = excluder.GetClassesToExclude(options.ExclusionThreshold,
-			options.UserDefinedExclusions,
-			imageNames,
-			options.Folder,
-			options.InAnnotationType)
+func validateNumberOfCLIArguments() {
+	numberOfCLIArguments := 12
+	if len(os.Args) > numberOfCLIArguments {
+		panic("augoment requires at most 11 arguments.")
 	}
-	fmt.Println("All images containing the following classes will be excluded: ")
-	fmt.Println(classesToExclude)
-	orchestration.BatchProcess(&options,
-		imagePaths,
-		imageNames,
-		&preprocessor,
-		&converter,
-		&garbageCollector,
-		classesToExclude)
-
 }

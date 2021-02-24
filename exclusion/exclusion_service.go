@@ -26,24 +26,20 @@ import (
 type ExclusionService struct {
 }
 
-func (this ExclusionService) GetClassesToExclude(exclusionThreshold int,
-	userDefinedExclusions []string,
-	imageNames []string,
-	folder string,
-	annotationType entities.AnnotationType) []string {
+func (this ExclusionService) GetClassesToExclude(request entities.ExcludeRequest) entities.ExcludeResponse {
 	var wg sync.WaitGroup
-	annotationPaths := make(chan string, len(imageNames))
-	annotationsToGroup := make(chan entities.Annotation, len(imageNames))
+	annotationPaths := make(chan string, len(request.ImageNames))
+	annotationsToGroup := make(chan entities.Annotation, len(request.ImageNames))
 	wg.Add(2)
-	go this.getAnnotationPathsFromImageNames(imageNames, folder, annotationPaths, &wg)
-	go this.readAnnotations(annotationType, &wg, annotationPaths, annotationsToGroup)
+	go this.getAnnotationPathsFromImageNames(request.ImageNames, request.Folder, annotationPaths, &wg)
+	go this.readAnnotations(request.AnnotationType, &wg, annotationPaths, annotationsToGroup)
 	wg.Wait()
 	countMap := this.getCountMap(annotationsToGroup)
-	classesToExclude := this.excludeClassesWithCountBelowThreshold(exclusionThreshold, countMap)
-	for _, userDefinedExclusion := range userDefinedExclusions {
+	classesToExclude := this.excludeClassesWithCountBelowThreshold(request.ExclusionThreshold, countMap)
+	for _, userDefinedExclusion := range request.UserDefinedExclusions {
 		if !commons.StringArrayContains(classesToExclude, userDefinedExclusion) {
 			classesToExclude = append(classesToExclude, userDefinedExclusion)
 		}
 	}
-	return classesToExclude
+	return entities.ExcludeResponse{classesToExclude}
 }
