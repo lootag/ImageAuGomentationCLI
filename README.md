@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/github/lootag/ImageAuGomentationCLI.png)](https://travis-ci.org/github/lootag/ImageAuGomentationCLI)
 # ImageAuGomentationCLI
 ImageAuGomentationCLI is a simple command-line tool that allows users to conveniently analyze and augment annotated and not-annotated images. It's written in Go (Golang), and leverages its beautiful concurrency model to speed up computations.
 
