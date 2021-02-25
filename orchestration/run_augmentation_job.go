@@ -111,13 +111,19 @@ func (this Application) computePathsAndNamesToProcess(index int,
 	namesToProcess := []string{}
 	//TODO:Make method to get images and paths to process
 	fmt.Println("Processing batch " + strconv.Itoa(index+1) + " out of " + strconv.Itoa(numberOfBatches))
-	start := index * options.BatchSize
-	end := start + options.BatchSize
-	pathsToProcess = imagePaths[start:end]
-	namesToProcess = imageNames[start:end]
+	if index == numberOfBatches-1 {
+		start := index * options.BatchSize
+		pathsToProcess = imagePaths[start:]
+		namesToProcess = imageNames[start:]
+
+	} else {
+		start := index * options.BatchSize
+		end := start + options.BatchSize
+		pathsToProcess = imagePaths[start:end]
+		namesToProcess = imageNames[start:end]
+	}
 
 	return pathsToProcess, namesToProcess
-
 }
 
 func (this Application) augmentBatch(options entities.Options,

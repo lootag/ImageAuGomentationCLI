@@ -1,16 +1,15 @@
 package tests
 
 import (
-	"testing"
 	"os/exec"
+	"testing"
 
 	"github.com/lootag/ImageAuGomentationCLI/tests/helpers"
-
 )
 
 func TestAllAugmentationsWithFolderArgPascalInOut(t *testing.T) {
 	defer helpers.ExecuteSequentially()()
-	
+
 	//Arrange
 	t.Logf("executing test 2")
 	annotationTypeIn := "PascalVoc"
