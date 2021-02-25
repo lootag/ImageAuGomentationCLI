@@ -3,7 +3,7 @@ all: build_test test build install
 build_test:
 	go build -o tests/bin/augoment
 test:
-	go test -v -cover -race ./...
+	go test tests
 build:
 	go build -o /usr/local/bin/augoment
 	source ~/.bashrc
